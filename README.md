@@ -312,7 +312,7 @@ For production deployment, update the API URL accordingly.
    - Ensure database `placement_prep_db` exists
 
 2. **Port 8080 already in use**
-   - Change port in `application.properties`: `server.port=8081`
+   - Change port in `application.properties`: `server.port=8080`
 
 3. **Code execution not working**
    - Ensure Java, Python, Node.js, GCC are installed on the server

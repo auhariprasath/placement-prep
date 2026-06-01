@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaCompass, FaSearch, FaBriefcase, FaFileAlt, FaCalendarAlt, FaArrowRight, FaComments, FaBlog, FaRobot, FaCode, FaCheckCircle } from 'react-icons/fa';
+import { FaCompass, FaSearch, FaBriefcase, FaFileAlt, FaCalendarAlt, FaArrowRight, FaComments, FaRobot, FaCode, FaCheckCircle } from 'react-icons/fa';
 
 const Home = () => {
   const features = [
