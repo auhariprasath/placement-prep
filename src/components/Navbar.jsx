@@ -18,8 +18,6 @@ import {
   FaTimes,
   FaGraduationCap,
   FaCheckCircle,
-  FaChevronRight,
-  FaSparkles,
   FaKey,
   FaCog
 } from "react-icons/fa";
@@ -45,15 +43,14 @@ export default function Navbar() {
 
   const navSections = [
     {
-      title: "Core AI Prep",
+      title: "Preparation",
       items: [
         { href: "/", label: "Home", icon: <FaHome /> },
         {
           href: "/mock-interview",
           label: "AI Mock Interview",
           icon: <FaMicrophone />,
-          badge: "AI VOICE",
-          badgeColor: "pink"
+          badge: "AI"
         },
         { href: "/domain-selection", label: "Domain Selection", icon: <FaCompass /> },
         { href: "/study-planner", label: "Study Planner", icon: <FaCalendarAlt /> },
@@ -61,39 +58,28 @@ export default function Navbar() {
       ]
     },
     {
-      title: "Placement Tools",
+      title: "Tools & Practice",
       items: [
-        { href: "/job-search", label: "Job Search", icon: <FaSearch /> },
-        { href: "/interview-search", label: "Interviews", icon: <FaBriefcase /> },
+        { href: "/compiler", label: "Online Compiler", icon: <FaCode /> },
+        { href: "/interview-search", label: "Interview Questions", icon: <FaBriefcase /> },
         { href: "/resume-matcher", label: "ATS Scanner", icon: <FaCheckCircle /> },
         { href: "/resume-builder", label: "Resume Builder", icon: <FaFileAlt /> },
-        { href: "/compiler", label: "Online Compiler", icon: <FaCode /> },
+        { href: "/job-search", label: "Job Search", icon: <FaSearch /> },
       ]
     },
     {
-      title: "Community & Learn",
+      title: "General & Settings",
       items: [
         { href: "/forum", label: "Community Forum", icon: <FaComments /> },
         { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
-      ]
-    },
-    {
-      title: "System & API",
-      items: [
-        {
-          href: "/settings",
-          label: "API Keys & Settings",
-          icon: <FaKey />,
-          badge: "API",
-          badgeColor: "blue",
-        },
+        { href: "/settings", label: "Settings & API Keys", icon: <FaKey /> },
       ]
     }
   ];
 
   return (
     <>
-      {/* Mobile Top Bar (Visible only on <= 1024px) */}
+      {/* Mobile Top Bar */}
       <header className="mobile-topbar">
         <Link href="/" className="mobile-brand">
           <div className="brand-logo-icon">
@@ -130,12 +116,12 @@ export default function Navbar() {
               </div>
               <div className="brand-text">
                 <span className="brand-title">PlacementPrep</span>
-                <span className="brand-tag">AI SUITE</span>
+                <span className="brand-tag">AI CAREER SUITE</span>
               </div>
             </Link>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Sections */}
           <nav className="sidebar-nav">
             {navSections.map((section, sIdx) => (
               <div key={sIdx} className="nav-section">
@@ -152,11 +138,10 @@ export default function Navbar() {
                           <span className="nav-link-icon">{item.icon}</span>
                           <span className="nav-link-label">{item.label}</span>
                           {item.badge && (
-                            <span className={`nav-link-badge badge-${item.badgeColor}`}>
+                            <span className="nav-link-badge">
                               {item.badge}
                             </span>
                           )}
-                          {isActive && <span className="active-glow-bar" />}
                         </Link>
                       </li>
                     );
@@ -166,25 +151,15 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Sidebar Bottom CTA & Status */}
+          {/* Clean Minimalist Footer */}
           <div className="sidebar-footer">
-            <Link href="/mock-interview" className="sidebar-cta-card">
-              <div className="cta-icon-pill">
-                <FaMicrophone />
-              </div>
-              <div className="cta-text">
-                <span className="cta-title">Voice Interview</span>
-                <span className="cta-sub">Practice with AI</span>
-              </div>
-              <FaChevronRight className="cta-arrow" />
-            </Link>
-
-            <div className="sidebar-status-row">
+            <div className="sidebar-status-pill">
               <span className="status-dot-pulse" />
-              <span className="status-label">Groq AI Engine Online</span>
+              <span className="status-label">Groq AI Connected</span>
             </div>
-
-            <p className="sidebar-copy">© 2026 PlacementPrep AI</p>
+            <Link href="/settings" className="footer-settings-btn" title="Settings">
+              <FaCog />
+            </Link>
           </div>
         </div>
       </aside>
@@ -216,13 +191,13 @@ export default function Navbar() {
 
         .mobile-brand .brand-title {
           font-weight: 800;
-          font-size: 1.12rem;
+          font-size: 1.1rem;
           color: #0f172a;
         }
 
         .mobile-hamburger-btn {
-          width: 40px;
-          height: 40px;
+          width: 38px;
+          height: 38px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -230,9 +205,9 @@ export default function Navbar() {
           border: 1px solid #cbd5e1;
           color: #0f172a;
           border-radius: 8px;
-          font-size: 1.15rem;
+          font-size: 1.1rem;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: background 0.2s ease;
         }
 
         .mobile-hamburger-btn:hover {
@@ -244,7 +219,7 @@ export default function Navbar() {
           display: none;
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(4px);
           -webkit-backdrop-filter: blur(4px);
           z-index: 1001;
@@ -258,57 +233,51 @@ export default function Navbar() {
           bottom: 0;
           width: 260px;
           height: 100vh;
-          background: #0b101c;
+          background: #090e17;
           border-right: 1px solid rgba(255, 255, 255, 0.08);
           z-index: 1002;
           overflow: hidden;
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .sidebar-inner {
           display: flex;
           flex-direction: column;
           height: 100%;
-          padding: 20px 14px 16px;
+          padding: 18px 12px 14px;
           overflow-y: auto;
-          scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+          scrollbar-width: none;
         }
 
         .sidebar-inner::-webkit-scrollbar {
-          width: 5px;
-        }
-
-        .sidebar-inner::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.12);
-          border-radius: 10px;
+          display: none;
         }
 
         /* Brand */
         .sidebar-header {
-          padding: 4px 6px 20px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          margin-bottom: 16px;
+          padding: 2px 6px 14px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+          margin-bottom: 12px;
         }
 
         .sidebar-brand {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 11px;
           text-decoration: none;
         }
 
         .brand-logo-icon {
-          width: 38px;
-          height: 38px;
-          border-radius: 10px;
-          background: var(--grad-primary);
+          width: 34px;
+          height: 34px;
+          border-radius: 9px;
+          background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: white;
-          font-size: 1.15rem;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+          color: #ffffff;
+          font-size: 1.05rem;
+          box-shadow: 0 2px 10px rgba(124, 58, 237, 0.4);
           flex-shrink: 0;
         }
 
@@ -318,20 +287,19 @@ export default function Navbar() {
         }
 
         .brand-title {
-          font-weight: 800;
-          font-size: 1.12rem;
+          font-weight: 700;
+          font-size: 1.02rem;
           letter-spacing: -0.01em;
-          background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #ffffff;
+          line-height: 1.2;
         }
 
         .brand-tag {
-          font-size: 0.62rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
-          color: #ec4899;
-          margin-top: -1px;
+          font-size: 0.6rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          color: #94a3b8;
+          margin-top: 1px;
         }
 
         /* Nav Sections */
@@ -339,73 +307,74 @@ export default function Navbar() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 18px;
+          gap: 14px;
+        }
+
+        .nav-section {
+          display: flex;
+          flex-direction: column;
         }
 
         .nav-section-title {
-          font-size: 0.72rem;
-          font-weight: 800;
+          font-size: 0.66rem;
+          font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.09em;
-          color: #c7d2fe !important;
+          letter-spacing: 0.08em;
+          color: #64748b;
           padding: 0 10px;
-          margin-bottom: 7px;
+          margin-bottom: 4px;
         }
 
         .nav-list {
           list-style: none;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 2px;
         }
 
         .sidebar-nav-link {
           position: relative;
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 10px 14px;
-          border-radius: 10px;
-          color: #f1f5f9 !important;
-          font-size: 0.91rem;
+          gap: 11px;
+          padding: 8px 12px;
+          border-radius: 8px;
+          color: #cbd5e1 !important;
+          font-size: 0.88rem;
           font-weight: 500;
           text-decoration: none;
-          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: background 0.15s ease, color 0.15s ease;
         }
 
         .sidebar-nav-link:hover {
           color: #ffffff !important;
-          background: rgba(255, 255, 255, 0.1);
-          transform: translateX(2px);
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .sidebar-nav-link.active {
           color: #ffffff !important;
-          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
-          border: 1px solid rgba(196, 181, 253, 0.4);
-          font-weight: 700;
-          box-shadow: 0 4px 16px rgba(124, 58, 237, 0.45);
+          background: #7c3aed !important;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
         }
 
         .nav-link-icon {
-          font-size: 1.1rem;
+          font-size: 1rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 22px;
-          color: #cbd5e1;
-          transition: all 0.2s ease;
+          width: 20px;
+          color: #94a3b8;
+          transition: color 0.15s ease;
           flex-shrink: 0;
         }
 
         .sidebar-nav-link:hover .nav-link-icon {
           color: #ffffff;
-          transform: scale(1.1);
         }
 
         .sidebar-nav-link.active .nav-link-icon {
           color: #ffffff !important;
-          filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
         }
 
         .nav-link-label {
@@ -413,134 +382,56 @@ export default function Navbar() {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          color: #f1f5f9 !important;
-          font-weight: 500;
-          letter-spacing: 0.01em;
-        }
-
-        .sidebar-nav-link:hover .nav-link-label {
-          color: #ffffff !important;
-        }
-
-        .sidebar-nav-link.active .nav-link-label {
-          color: #ffffff !important;
-          font-weight: 700;
+          color: inherit;
         }
 
         .nav-link-badge {
           font-size: 0.58rem;
-          font-weight: 800;
-          letter-spacing: 0.05em;
-          padding: 2px 7px;
-          border-radius: 999px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          padding: 1px 6px;
+          border-radius: 4px;
+          background: rgba(124, 58, 237, 0.25);
+          color: #c4b5fd;
+          border: 1px solid rgba(124, 58, 237, 0.4);
         }
 
-        .badge-pink {
-          background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        .sidebar-nav-link.active .nav-link-badge {
+          background: rgba(255, 255, 255, 0.25);
           color: #ffffff;
-          box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+          border-color: rgba(255, 255, 255, 0.4);
         }
 
-        .badge-blue {
-          background: linear-gradient(135deg, #3b82f6, #6366f1);
-          color: #ffffff;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
-        }
-
-        .active-glow-bar {
-          position: absolute;
-          left: 0;
-          top: 6px;
-          bottom: 6px;
-          width: 4px;
-          background: #ffffff;
-          border-radius: 0 4px 4px 0;
-          box-shadow: 0 0 10px #ffffff;
-        }
-
-        /* Sidebar Footer */
+        /* Clean Minimal Footer */
         .sidebar-footer {
           margin-top: auto;
-          padding-top: 16px;
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .sidebar-cta-card {
+          padding-top: 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 12px;
-          border-radius: 10px;
-          background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
-          border: 1px solid rgba(236, 72, 153, 0.3);
-          text-decoration: none;
-          transition: all 0.2s ease;
+          justify-content: space-between;
+          padding-left: 6px;
+          padding-right: 4px;
         }
 
-        .sidebar-cta-card:hover {
-          background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
-          border-color: rgba(236, 72, 153, 0.5);
-          transform: translateY(-1px);
-        }
-
-        .cta-icon-pill {
-          width: 28px;
-          height: 28px;
-          border-radius: 7px;
-          background: var(--grad-accent);
-          color: #ffffff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.85rem;
-          flex-shrink: 0;
-        }
-
-        .cta-text {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .cta-title {
-          color: #ffffff;
-          font-size: 0.82rem;
-          font-weight: 700;
-          line-height: 1.2;
-        }
-
-        .cta-sub {
-          color: #cbd5e1;
-          font-size: 0.72rem;
-        }
-
-        .cta-arrow {
-          color: #f472b6;
-          font-size: 0.75rem;
-        }
-
-        .sidebar-status-row {
+        .sidebar-status-pill {
           display: flex;
           align-items: center;
           gap: 7px;
-          padding: 0 4px;
         }
 
         .status-dot-pulse {
-          width: 7px;
-          height: 7px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
           background: #10b981;
-          box-shadow: 0 0 8px #10b981;
+          box-shadow: 0 0 6px #10b981;
           animation: statusPulse 2s infinite;
         }
 
         @keyframes statusPulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.4; transform: scale(0.85); }
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.35; }
         }
 
         .status-label {
@@ -549,11 +440,22 @@ export default function Navbar() {
           font-weight: 500;
         }
 
-        .sidebar-copy {
-          font-size: 0.68rem;
-          color: #64748b;
-          text-align: center;
-          margin-top: 2px;
+        .footer-settings-btn {
+          width: 28px;
+          height: 28px;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #94a3b8;
+          font-size: 0.88rem;
+          text-decoration: none;
+          transition: all 0.15s ease;
+        }
+
+        .footer-settings-btn:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.08);
         }
 
         /* Responsive */
