@@ -32,9 +32,13 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <div className="app-shell">
+          <Navbar />
+          <div className="app-main-viewport">
+            <main className="app-content">{children}</main>
+            <Footer />
+          </div>
+        </div>
       </body>
     </html>
   );

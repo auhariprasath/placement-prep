@@ -247,7 +247,7 @@ export default function HomePage() {
 
       <style jsx>{`
         .home-root {
-          padding-top: 100px;
+          padding-top: 24px;
         }
 
         .hero-section {

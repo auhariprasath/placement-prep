@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -17,127 +17,265 @@ import {
   FaBars,
   FaTimes,
   FaGraduationCap,
-  FaCheckCircle
+  FaCheckCircle,
+  FaChevronRight,
+  FaSparkles
 } from "react-icons/fa";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navLinks = [
-    { href: "/", label: "Home", icon: <FaHome /> },
-    { href: "/mock-interview", label: "AI Mock Interview", icon: <FaMicrophone />, isHot: true },
-    { href: "/domain-selection", label: "Domain Selection", icon: <FaCompass /> },
-    { href: "/study-planner", label: "Study Planner", icon: <FaCalendarAlt /> },
-    { href: "/ai-agent", label: "AI Assistant", icon: <FaRobot /> },
-    { href: "/job-search", label: "Jobs", icon: <FaSearch /> },
-    { href: "/interview-search", label: "Interviews", icon: <FaBriefcase /> },
-    { href: "/resume-builder", label: "Resume Builder", icon: <FaFileAlt /> },
-    { href: "/resume-matcher", label: "ATS Scanner", icon: <FaCheckCircle /> },
-    { href: "/compiler", label: "Compiler", icon: <FaCode /> },
-    { href: "/forum", label: "Forum", icon: <FaComments /> },
-    { href: "/blog", label: "Guides", icon: <FaGraduationCap /> },
+  // Close mobile drawer on route change or resize
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const navSections = [
+    {
+      title: "Core AI Prep",
+      items: [
+        { href: "/", label: "Home", icon: <FaHome /> },
+        {
+          href: "/mock-interview",
+          label: "AI Mock Interview",
+          icon: <FaMicrophone />,
+          badge: "AI VOICE",
+          badgeColor: "pink"
+        },
+        { href: "/domain-selection", label: "Domain Selection", icon: <FaCompass /> },
+        { href: "/study-planner", label: "Study Planner", icon: <FaCalendarAlt /> },
+        { href: "/ai-agent", label: "AI Copilot", icon: <FaRobot /> },
+      ]
+    },
+    {
+      title: "Placement Tools",
+      items: [
+        { href: "/job-search", label: "Job Search", icon: <FaSearch /> },
+        { href: "/interview-search", label: "Interviews", icon: <FaBriefcase /> },
+        { href: "/resume-matcher", label: "ATS Scanner", icon: <FaCheckCircle /> },
+        { href: "/resume-builder", label: "Resume Builder", icon: <FaFileAlt /> },
+        { href: "/compiler", label: "Online Compiler", icon: <FaCode /> },
+      ]
+    },
+    {
+      title: "Community & Learn",
+      items: [
+        { href: "/forum", label: "Community Forum", icon: <FaComments /> },
+        { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
+      ]
+    }
   ];
 
   return (
-    <header className="navbar-header">
-      <div className="navbar-container">
-        <Link href="/" className="navbar-brand">
+    <>
+      {/* Mobile Top Bar (Visible only on <= 1024px) */}
+      <header className="mobile-topbar">
+        <Link href="/" className="mobile-brand">
           <div className="brand-logo-icon">
             <FaGraduationCap />
           </div>
-          <div className="brand-text">
-            <span className="brand-title">PlacementPrep</span>
-            <span className="brand-tag">AI SUITE</span>
-          </div>
+          <span className="brand-title">PlacementPrep</span>
         </Link>
+        <button
+          className="mobile-hamburger-btn"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle navigation sidebar"
+        >
+          {mobileOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </header>
 
-        {/* Desktop Nav */}
-        <nav className="navbar-nav desktop-nav">
-          {navLinks.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`nav-link-item ${isActive ? "active" : ""} ${item.isHot ? "hot-item" : ""}`}
-              >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-                {item.isHot && <span className="hot-pill">AI VOICE</span>}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Quick Action Button & Mobile Toggle */}
-        <div className="navbar-actions">
-          <Link href="/mock-interview" className="btn btn-accent action-cta">
-            <FaMicrophone /> Practice Interview
-          </Link>
-
-          <button
-            className="mobile-toggle-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="mobile-drawer">
-          <div className="mobile-drawer-links">
-            {navLinks.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`mobile-nav-item ${isActive ? "active" : ""}`}
-                >
-                  <span className="mobile-nav-icon">{item.icon}</span>
-                  <span className="mobile-nav-text">{item.label}</span>
-                  {item.isHot && <span className="hot-pill">AI</span>}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
+      {/* Backdrop overlay for mobile drawer */}
+      {mobileOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
       )}
 
+      {/* Sideways Navigation Sidebar */}
+      <aside className={`sidebar-aside ${mobileOpen ? "open" : ""}`}>
+        <div className="sidebar-inner">
+          {/* Brand Header */}
+          <div className="sidebar-header">
+            <Link href="/" className="sidebar-brand">
+              <div className="brand-logo-icon">
+                <FaGraduationCap />
+              </div>
+              <div className="brand-text">
+                <span className="brand-title">PlacementPrep</span>
+                <span className="brand-tag">AI SUITE</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="sidebar-nav">
+            {navSections.map((section, sIdx) => (
+              <div key={sIdx} className="nav-section">
+                <p className="nav-section-title">{section.title}</p>
+                <ul className="nav-list">
+                  {section.items.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <li key={item.href} className="nav-list-item">
+                        <Link
+                          href={item.href}
+                          className={`sidebar-nav-link ${isActive ? "active" : ""}`}
+                        >
+                          <span className="nav-link-icon">{item.icon}</span>
+                          <span className="nav-link-label">{item.label}</span>
+                          {item.badge && (
+                            <span className={`nav-link-badge badge-${item.badgeColor}`}>
+                              {item.badge}
+                            </span>
+                          )}
+                          {isActive && <span className="active-glow-bar" />}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
+          {/* Sidebar Bottom CTA & Status */}
+          <div className="sidebar-footer">
+            <Link href="/mock-interview" className="sidebar-cta-card">
+              <div className="cta-icon-pill">
+                <FaMicrophone />
+              </div>
+              <div className="cta-text">
+                <span className="cta-title">Voice Interview</span>
+                <span className="cta-sub">Practice with AI</span>
+              </div>
+              <FaChevronRight className="cta-arrow" />
+            </Link>
+
+            <div className="sidebar-status-row">
+              <span className="status-dot-pulse" />
+              <span className="status-label">Groq AI Engine Online</span>
+            </div>
+
+            <p className="sidebar-copy">© 2026 PlacementPrep AI</p>
+          </div>
+        </div>
+      </aside>
+
       <style jsx>{`
-        .navbar-header {
+        /* Mobile Topbar */
+        .mobile-topbar {
+          display: none;
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
-          height: 72px;
-          background: rgba(9, 13, 22, 0.82);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          height: 60px;
+          background: rgba(9, 13, 22, 0.95);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           z-index: 1000;
-        }
-
-        .navbar-container {
-          max-width: 1400px;
-          margin: 0 auto;
-          height: 100%;
-          padding: 0 20px;
-          display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 16px;
+          padding: 0 16px;
         }
 
-        .navbar-brand {
+        .mobile-brand {
           display: flex;
           align-items: center;
           gap: 10px;
+          text-decoration: none;
+        }
+
+        .mobile-hamburger-btn {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #ffffff;
+          border-radius: 8px;
+          font-size: 1.15rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .mobile-hamburger-btn:hover {
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Backdrop */
+        .sidebar-backdrop {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          z-index: 1001;
+        }
+
+        /* Sidebar Container */
+        .sidebar-aside {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 260px;
+          height: 100vh;
+          background: #0b101c;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          z-index: 1002;
+          overflow: hidden;
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar-inner {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          padding: 20px 14px 16px;
+          overflow-y: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+        }
+
+        .sidebar-inner::-webkit-scrollbar {
+          width: 5px;
+        }
+
+        .sidebar-inner::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 10px;
+        }
+
+        /* Brand */
+        .sidebar-header {
+          padding: 4px 6px 20px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          margin-bottom: 16px;
+        }
+
+        .sidebar-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
           text-decoration: none;
         }
 
@@ -150,8 +288,9 @@ export default function Navbar() {
           align-items: center;
           justify-content: center;
           color: white;
-          font-size: 1.2rem;
+          font-size: 1.15rem;
           box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+          flex-shrink: 0;
         }
 
         .brand-text {
@@ -161,148 +300,240 @@ export default function Navbar() {
 
         .brand-title {
           font-weight: 800;
-          font-size: 1.15rem;
+          font-size: 1.12rem;
           letter-spacing: -0.01em;
-          background: linear-gradient(135deg, #fff 40%, #a5b4fc 100%);
+          background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
 
         .brand-tag {
-          font-size: 0.65rem;
+          font-size: 0.62rem;
           font-weight: 700;
           letter-spacing: 0.1em;
           color: #ec4899;
+          margin-top: -1px;
         }
 
-        .desktop-nav {
+        /* Nav Sections */
+        .sidebar-nav {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+
+        .nav-section-title {
+          font-size: 0.68rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #64748b;
+          padding: 0 10px;
+          margin-bottom: 6px;
+        }
+
+        .nav-list {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+        }
+
+        .sidebar-nav-link {
+          position: relative;
           display: flex;
           align-items: center;
-          gap: 4px;
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-
-        .desktop-nav::-webkit-scrollbar {
-          display: none;
-        }
-
-        .nav-link-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          padding: 8px 12px;
-          border-radius: 8px;
-          font-size: 0.85rem;
-          font-weight: 500;
+          gap: 11px;
+          padding: 9px 12px;
+          border-radius: 9px;
           color: #94a3b8;
+          font-size: 0.88rem;
+          font-weight: 500;
           text-decoration: none;
-          white-space: nowrap;
           transition: all 0.2s ease;
-          position: relative;
         }
 
-        .nav-link-item:hover {
+        .sidebar-nav-link:hover {
           color: #ffffff;
-          background: rgba(255, 255, 255, 0.06);
+          background: rgba(255, 255, 255, 0.05);
         }
 
-        .nav-link-item.active {
+        .sidebar-nav-link.active {
           color: #ffffff;
-          background: rgba(99, 102, 241, 0.16);
+          background: rgba(99, 102, 241, 0.15);
+          border: 1px solid rgba(99, 102, 241, 0.3);
           font-weight: 600;
-          border: 1px solid rgba(99, 102, 241, 0.35);
         }
 
-        .nav-link-item.hot-item {
-          color: #f472b6;
+        .nav-link-icon {
+          font-size: 1.05rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          color: #64748b;
+          transition: color 0.2s ease;
         }
 
-        .nav-link-item.hot-item:hover {
-          color: #ffffff;
+        .sidebar-nav-link:hover .nav-link-icon {
+          color: #a5b4fc;
         }
 
-        .hot-pill {
-          font-size: 0.6rem;
+        .sidebar-nav-link.active .nav-link-icon {
+          color: #818cf8;
+        }
+
+        .nav-link-label {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .nav-link-badge {
+          font-size: 0.58rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
           padding: 2px 6px;
           border-radius: 999px;
-          background: var(--grad-accent);
-          color: #ffffff;
-          font-weight: 700;
-          letter-spacing: 0.04em;
         }
 
-        .navbar-actions {
+        .badge-pink {
+          background: linear-gradient(135deg, #ec4899, #8b5cf6);
+          color: #ffffff;
+          box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+        }
+
+        .active-glow-bar {
+          position: absolute;
+          left: 0;
+          top: 6px;
+          bottom: 6px;
+          width: 3px;
+          background: #818cf8;
+          border-radius: 0 3px 3px 0;
+          box-shadow: 0 0 10px #818cf8;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+          margin-top: auto;
+          padding-top: 16px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
           display: flex;
-          align-items: center;
+          flex-direction: column;
           gap: 12px;
         }
 
-        .action-cta {
-          font-size: 0.85rem;
-          padding: 8px 14px;
-          white-space: nowrap;
-        }
-
-        .mobile-toggle-btn {
-          display: none;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: white;
-          width: 40px;
-          height: 40px;
-          border-radius: 8px;
-          cursor: pointer;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.1rem;
-        }
-
-        .mobile-drawer {
-          position: absolute;
-          top: 72px;
-          left: 0;
-          right: 0;
-          background: #090d16;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          padding: 16px 20px 24px;
-          box-shadow: 0 20px 30px rgba(0, 0, 0, 0.7);
-        }
-
-        .mobile-drawer-links {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 8px;
-        }
-
-        .mobile-nav-item {
+        .sidebar-cta-card {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 14px;
-          border-radius: 8px;
-          background: rgba(255, 255, 255, 0.04);
-          color: #cbd5e1;
-          font-size: 0.9rem;
+          padding: 10px 12px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+          border: 1px solid rgba(236, 72, 153, 0.3);
           text-decoration: none;
+          transition: all 0.2s ease;
         }
 
-        .mobile-nav-item.active {
-          background: rgba(99, 102, 241, 0.2);
-          border: 1px solid rgba(99, 102, 241, 0.4);
+        .sidebar-cta-card:hover {
+          background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+          border-color: rgba(236, 72, 153, 0.5);
+          transform: translateY(-1px);
+        }
+
+        .cta-icon-pill {
+          width: 28px;
+          height: 28px;
+          border-radius: 7px;
+          background: var(--grad-accent);
           color: #ffffff;
-          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          flex-shrink: 0;
         }
 
-        @media (max-width: 1200px) {
-          .desktop-nav {
-            display: none;
-          }
-          .mobile-toggle-btn {
+        .cta-text {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .cta-title {
+          color: #ffffff;
+          font-size: 0.82rem;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+
+        .cta-sub {
+          color: #94a3b8;
+          font-size: 0.68rem;
+        }
+
+        .cta-arrow {
+          color: #f472b6;
+          font-size: 0.75rem;
+        }
+
+        .sidebar-status-row {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          padding: 0 4px;
+        }
+
+        .status-dot-pulse {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 8px #10b981;
+          animation: statusPulse 2s infinite;
+        }
+
+        @keyframes statusPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .status-label {
+          font-size: 0.7rem;
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        .sidebar-copy {
+          font-size: 0.66rem;
+          color: #475569;
+          text-align: center;
+          margin-top: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+          .mobile-topbar {
             display: flex;
+          }
+
+          .sidebar-backdrop {
+            display: block;
+          }
+
+          .sidebar-aside {
+            transform: translateX(-100%);
+            box-shadow: 4px 0 25px rgba(0, 0, 0, 0.7);
+          }
+
+          .sidebar-aside.open {
+            transform: translateX(0);
           }
         }
       `}</style>
-    </header>
+    </>
   );
 }
