@@ -4,7 +4,7 @@ import { getActiveApiKey, setActiveApiKey, testGroqApiKey, maskKey } from "@/lib
 export async function GET() {
   try {
     const groqKey = getActiveApiKey("GROQ_API_KEY");
-    const groqModel = getActiveApiKey("GROQ_MODEL") || "llama-3.3-70b-versatile";
+    const groqModel = getActiveApiKey("GROQ_MODEL") || "llama-3.1-8b-instant";
 
     return NextResponse.json({
       success: true,
@@ -42,10 +42,11 @@ export async function POST(req) {
           message: "No Groq API Key provided to test",
         });
       }
-      const testResult = await testGroqApiKey(currentKey, groqModel);
+      const testResult = await testGroqApiKey(currentKey, groqModel || "llama-3.1-8b-instant");
       return NextResponse.json({
         success: testResult.valid,
         message: testResult.message,
+        workingModel: testResult.workingModel,
       });
     }
 

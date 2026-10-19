@@ -7,7 +7,7 @@ if (!global.__APP_RUNTIME_CONFIG) {
     GROQ_API_KEY: process.env.GROQ_API_KEY || "",
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "https://lhfroegebpddmjgnwdvk.supabase.co",
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxoZnJvZWdlYnBkZG1qZ253ZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTI5OTAsImV4cCI6MjEwNzk4ODk5MH0.BhbLNlcgWyfb6kdiA7crcZHEeoUeE7MQEBb-7RRna4s",
-    GROQ_MODEL: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+    GROQ_MODEL: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
   };
 }
 
@@ -69,36 +69,60 @@ export function setActiveApiKey(keyName, value) {
 
 /**
  * Tests a Groq API key directly against the Groq API
+ * Attempts requested lightweight model, and gracefully checks available alternatives
  */
 export async function testGroqApiKey(apiKey, model = "llama-3.1-8b-instant") {
   if (!apiKey || !apiKey.trim()) {
     return { valid: false, message: "API Key is empty" };
   }
 
-  try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey.trim()}`,
-      },
-      body: JSON.stringify({
-        model: model || "llama-3.1-8b-instant",
-        messages: [{ role: "user", content: "Ping" }],
-        max_tokens: 5,
-      }),
-    });
+  const cleanKey = apiKey.trim();
+  const modelsToTry = [
+    model || "llama-3.1-8b-instant",
+    "llama-3.1-8b-instant",
+    "qwen/qwen3.8-27b",
+    "openai/gpt-oss-20b",
+    "llama-3.3-70b-versatile"
+  ].filter((m, i, arr) => m && arr.indexOf(m) === i);
 
-    if (res.ok) {
-      return { valid: true, message: "API Key is valid and active!" };
+  let lastErrorMsg = "";
+
+  for (const m of modelsToTry) {
+    try {
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cleanKey}`,
+        },
+        body: JSON.stringify({
+          model: m,
+          messages: [{ role: "user", content: "Ping" }],
+          max_tokens: 5,
+        }),
+      });
+
+      if (res.ok) {
+        return {
+          valid: true,
+          message: `API Key is valid and active! (${m})`,
+          workingModel: m,
+        };
+      }
+
+      const err = await res.json().catch(() => ({}));
+      lastErrorMsg = err?.error?.message || `HTTP ${res.status}: ${res.statusText}`;
+
+      // If it's an authentication error (401), stop immediately
+      if (res.status === 401 || lastErrorMsg.toLowerCase().includes("invalid api key")) {
+        return { valid: false, message: "Invalid API key: Key is not recognized or has expired." };
+      }
+    } catch (error) {
+      lastErrorMsg = error.message || "Failed to reach Groq server";
     }
-
-    const err = await res.json().catch(() => ({}));
-    const errorMsg = err?.error?.message || `HTTP ${res.status}: ${res.statusText}`;
-    return { valid: false, message: errorMsg };
-  } catch (error) {
-    return { valid: false, message: error.message || "Failed to reach Groq server" };
   }
+
+  return { valid: false, message: lastErrorMsg };
 }
 
 /**

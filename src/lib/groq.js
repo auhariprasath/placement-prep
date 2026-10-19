@@ -17,7 +17,7 @@ export async function callGroq({
   model = null,
 }) {
   const apiKey = getActiveApiKey("GROQ_API_KEY", explicitKey);
-  const activeModel = model || getActiveApiKey("GROQ_MODEL") || "llama-3.3-70b-versatile";
+  const activeModel = model || getActiveApiKey("GROQ_MODEL") || "llama-3.1-8b-instant";
 
   if (!apiKey) {
     throw new Error(
@@ -55,11 +55,19 @@ export async function callGroq({
     const errorText = await response.text();
     console.error("Groq API error:", response.status, errorText);
 
-    // Fallback model if the current one has rate limit or deprecation
-    if (activeModel !== "llama-3.1-8b-instant") {
+    // Gracefully try lightweight fallback models if the current model is rate-limited, not found, or deprecated
+    const fallbacks = [
+      "llama-3.1-8b-instant",
+      "qwen/qwen3.8-27b",
+      "openai/gpt-oss-20b",
+      "openai/gpt-oss-120b",
+      "llama-3.3-70b-versatile",
+    ].filter((m) => m !== activeModel);
+
+    for (const fbModel of fallbacks) {
       try {
-        console.warn("Retrying with llama-3.1-8b-instant fallback...");
-        payload.model = "llama-3.1-8b-instant";
+        console.warn(`Retrying with ${fbModel} fallback...`);
+        payload.model = fbModel;
         const retryRes = await fetch(GROQ_API_URL, {
           method: "POST",
           headers: {
@@ -70,10 +78,14 @@ export async function callGroq({
         });
         if (retryRes.ok) {
           const data = await retryRes.json();
-          return data.choices?.[0]?.message?.content || "";
+          return (
+            data.choices?.[0]?.message?.content ||
+            data.choices?.[0]?.message?.reasoning ||
+            ""
+          );
         }
       } catch (e) {
-        console.error("Fallback failed", e);
+        console.error(`Fallback to ${fbModel} failed`, e);
       }
     }
 
@@ -81,7 +93,11 @@ export async function callGroq({
   }
 
   const data = await response.json();
-  return data.choices?.[0]?.message?.content || "";
+  return (
+    data.choices?.[0]?.message?.content ||
+    data.choices?.[0]?.message?.reasoning ||
+    ""
+  );
 }
 
 /**

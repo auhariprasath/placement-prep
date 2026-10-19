@@ -19,7 +19,7 @@ import {
 export default function SettingsPage() {
   const [groqKey, setGroqKey] = useState("");
   const [showGroqKey, setShowGroqKey] = useState(false);
-  const [groqModel, setGroqModel] = useState("llama-3.3-70b-versatile");
+  const [groqModel, setGroqModel] = useState("llama-3.1-8b-instant");
 
   // Status & Feedback
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ export default function SettingsPage() {
       const data = await res.json();
       if (data.success && data.settings) {
         setServerSettings(data.settings);
-        setGroqModel(data.settings.groqModel || "llama-3.3-70b-versatile");
+        setGroqModel(data.settings.groqModel || "llama-3.1-8b-instant");
       }
 
       // Check if user has an override in localStorage
@@ -87,6 +87,9 @@ export default function SettingsPage() {
       if (data.success) {
         setGroqTestStatus({ valid: true, message: data.message || "Key is active and responsive!" });
         showToast("Groq API Key is valid and active!");
+        if (data.workingModel) {
+          setGroqModel(data.workingModel);
+        }
       } else {
         setGroqTestStatus({ valid: false, message: data.message || "Invalid API key" });
         showToast(data.message || "Failed to validate key", true);
@@ -230,11 +233,17 @@ export default function SettingsPage() {
                 onChange={(e) => setGroqModel(e.target.value)}
                 className="form-select"
               >
-                <option value="llama-3.3-70b-versatile">
-                  Llama 3.3 70B Versatile (Recommended — Deepest reasoning & best interview feedback)
-                </option>
                 <option value="llama-3.1-8b-instant">
-                  Llama 3.1 8B Instant (Ultra-fast latency)
+                  Llama 3.1 8B Instant (Recommended — Lightweight, ultra-fast latency & highest rate limits)
+                </option>
+                <option value="qwen/qwen3.8-27b">
+                  Qwen 2.5 / 3.8 27B (Lightweight alternative — high accuracy)
+                </option>
+                <option value="openai/gpt-oss-20b">
+                  GPT OSS 20B (Compact reasoning model)
+                </option>
+                <option value="llama-3.3-70b-versatile">
+                  Llama 3.3 70B Versatile (Deep reasoning — larger model)
                 </option>
               </select>
             </div>
