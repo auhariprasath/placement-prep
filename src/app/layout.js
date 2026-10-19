@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StyledJsxRegistry from "./registry";
 
 export const metadata = {
   title: "PlacementPrep AI | All-in-One Placement & Interview Prep Suite",
@@ -27,18 +28,20 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>
-        <div className="app-shell">
-          <Navbar />
-          <div className="app-main-viewport">
-            <main className="app-content">{children}</main>
-            <Footer />
+      <body suppressHydrationWarning>
+        <StyledJsxRegistry>
+          <div className="app-shell">
+            <Navbar />
+            <div className="app-main-viewport">
+              <main className="app-content">{children}</main>
+              <Footer />
+            </div>
           </div>
-        </div>
+        </StyledJsxRegistry>
       </body>
     </html>
   );

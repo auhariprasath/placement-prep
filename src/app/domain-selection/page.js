@@ -56,7 +56,7 @@ export default function DomainSelectionPage() {
   };
 
   return (
-    <div className="page-wrapper container">
+    <div className="page-wrapper container" suppressHydrationWarning>
       <div className="page-header">
         <span className="badge-tag">
           <FaCompass style={{ marginRight: "6px" }} /> AI Academic & Career Mapping
