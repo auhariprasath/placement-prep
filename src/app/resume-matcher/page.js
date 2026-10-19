@@ -272,12 +272,14 @@ Requirements:
           padding: 28px;
           display: flex;
           flex-direction: column;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .panel-title {
           font-size: 1.15rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 16px;
         }
 
@@ -294,12 +296,12 @@ Requirements:
         }
 
         .upload-dropzone {
-          border: 2px dashed rgba(255, 255, 255, 0.15);
+          border: 2px dashed #cbd5e1;
           border-radius: var(--radius-sm);
           padding: 16px;
           text-align: center;
           cursor: pointer;
-          background: rgba(13, 20, 36, 0.6);
+          background: #f8fafc;
           margin-bottom: 14px;
         }
 
@@ -309,17 +311,17 @@ Requirements:
           justify-content: center;
           gap: 8px;
           cursor: pointer;
-          color: var(--text-secondary);
+          color: #475569;
           font-size: 0.85rem;
         }
 
         .upload-icon {
-          color: #818cf8;
+          color: #6366f1;
           font-size: 1.2rem;
         }
 
         .file-name {
-          color: #34d399;
+          color: #059669;
           font-weight: 600;
         }
 
@@ -335,7 +337,7 @@ Requirements:
         }
 
         .error-text {
-          color: #f87171;
+          color: #dc2626;
           font-size: 0.9rem;
           margin-top: 12px;
         }
@@ -351,6 +353,8 @@ Requirements:
 
         .scorecard-card {
           padding: 36px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .score-top-row {
@@ -364,37 +368,37 @@ Requirements:
           width: 130px;
           height: 130px;
           border-radius: 50%;
-          background: rgba(99, 102, 241, 0.12);
-          border: 4px solid #818cf8;
+          background: #f8fafc;
+          border: 4px solid #6366f1;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          box-shadow: 0 0 24px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
         }
 
         .score-number {
           font-size: 2.2rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .score-gauge-label {
           font-size: 0.7rem;
           font-weight: 600;
-          color: #a5b4fc;
+          color: #6366f1;
         }
 
         .score-summary-title {
           font-size: 1.4rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin: 8px 0;
         }
 
         .score-summary-desc {
-          color: #cbd5e1;
+          color: #475569;
           font-size: 0.95rem;
           line-height: 1.6;
         }

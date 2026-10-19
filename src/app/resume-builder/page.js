@@ -358,12 +358,14 @@ export default function ResumeBuilderPage() {
 
         .editor-card {
           padding: 28px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .editor-section-title {
           font-size: 1.15rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 14px;
         }
 
@@ -387,8 +389,8 @@ export default function ResumeBuilderPage() {
         }
 
         .project-editor-box {
-          background: rgba(13, 20, 36, 0.6);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           padding: 16px;
           border-radius: var(--radius-sm);
           margin-bottom: 14px;
@@ -406,9 +408,9 @@ export default function ResumeBuilderPage() {
         }
 
         .btn-delete {
-          background: rgba(239, 68, 68, 0.2);
-          border: 1px solid rgba(239, 68, 68, 0.4);
-          color: #f87171;
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          color: #dc2626;
           width: 38px;
           border-radius: 6px;
           cursor: pointer;
@@ -426,15 +428,15 @@ export default function ResumeBuilderPage() {
           justify-content: space-between;
           align-items: center;
           padding: 14px 20px;
-          background: rgba(18, 26, 45, 0.7);
+          background: #ffffff;
           border-radius: var(--radius-sm);
-          border: 1px solid var(--border-light);
+          border: 1px solid #e2e8f0;
         }
 
         .preview-badge {
           font-size: 0.85rem;
           font-weight: 600;
-          color: #cbd5e1;
+          color: #0f172a;
           display: flex;
           align-items: center;
         }
@@ -445,7 +447,7 @@ export default function ResumeBuilderPage() {
           color: #1a1a1a;
           padding: 48px;
           border-radius: 6px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
           font-family: 'Times New Roman', Times, serif;
           min-height: 900px;
         }

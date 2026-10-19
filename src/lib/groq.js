@@ -3,8 +3,9 @@
  * Uses native fetch (Node 18+ and edge compatible) for zero-dependency AI calls.
  */
 
+import { getActiveApiKey } from "@/lib/keys";
+
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
 export async function callGroq({
   prompt,
@@ -12,12 +13,15 @@ export async function callGroq({
   temperature = 0.5,
   maxTokens = 2500,
   responseFormat = null,
+  apiKey: explicitKey = null,
+  model = null,
 }) {
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = getActiveApiKey("GROQ_API_KEY", explicitKey);
+  const activeModel = model || getActiveApiKey("GROQ_MODEL") || "llama-3.3-70b-versatile";
 
   if (!apiKey) {
     throw new Error(
-      "GROQ_API_KEY is not configured in .env.local or environment variables. Please add your free key from https://console.groq.com"
+      "GROQ_API_KEY is not configured or has expired. Please open the Settings page to add your active Groq API key."
     );
   }
 
@@ -28,7 +32,7 @@ export async function callGroq({
   messages.push({ role: "user", content: prompt });
 
   const payload = {
-    model: DEFAULT_MODEL,
+    model: activeModel,
     messages,
     temperature,
     max_tokens: maxTokens,
@@ -52,7 +56,7 @@ export async function callGroq({
     console.error("Groq API error:", response.status, errorText);
 
     // Fallback model if the current one has rate limit or deprecation
-    if (DEFAULT_MODEL !== "llama-3.1-8b-instant") {
+    if (activeModel !== "llama-3.1-8b-instant") {
       try {
         console.warn("Retrying with llama-3.1-8b-instant fallback...");
         payload.model = "llama-3.1-8b-instant";

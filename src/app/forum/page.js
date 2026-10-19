@@ -345,9 +345,9 @@ export default function ForumPage() {
         }
 
         .cat-chip {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          color: #334155;
           padding: 6px 14px;
           border-radius: var(--radius-full);
           font-size: 0.8rem;
@@ -373,7 +373,8 @@ export default function ForumPage() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -385,14 +386,17 @@ export default function ForumPage() {
           width: 100%;
           max-width: 580px;
           padding: 32px;
-          background: #0d1424;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: var(--radius-md);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .modal-title {
           font-size: 1.4rem;
-          color: white;
+          color: #0f172a;
           margin-bottom: 20px;
+          font-weight: 800;
         }
 
         .modal-actions {
@@ -411,6 +415,8 @@ export default function ForumPage() {
 
         .post-card {
           padding: 28px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .post-header-line {
@@ -428,30 +434,30 @@ export default function ForumPage() {
 
         .author-icon {
           font-size: 1.8rem;
-          color: #818cf8;
+          color: #6366f1;
         }
 
         .author-name {
           font-weight: 700;
           font-size: 0.95rem;
-          color: #ffffff;
+          color: #0f172a;
           display: block;
         }
 
         .author-role {
           font-size: 0.78rem;
-          color: var(--text-secondary);
+          color: #64748b;
         }
 
         .post-title {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 10px;
         }
 
         .post-body {
-          color: #cbd5e1;
+          color: #475569;
           font-size: 0.95rem;
           line-height: 1.6;
           margin-bottom: 18px;
@@ -460,14 +466,14 @@ export default function ForumPage() {
         .post-actions-bar {
           display: flex;
           gap: 14px;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #f1f5f9;
           padding-top: 14px;
         }
 
         .btn-action-upvote, .btn-action-comment {
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+          color: #334155;
           padding: 6px 14px;
           border-radius: var(--radius-sm);
           font-size: 0.85rem;
@@ -480,18 +486,19 @@ export default function ForumPage() {
         }
 
         .btn-action-upvote:hover {
-          background: rgba(99, 102, 241, 0.2);
-          color: white;
+          background: #eef2ff;
+          color: #4338ca;
         }
 
         .btn-action-comment:hover {
-          background: rgba(236, 72, 153, 0.2);
-          color: white;
+          background: #fdf2f8;
+          color: #be185d;
         }
 
         .comment-thread {
           margin-top: 18px;
-          background: rgba(9, 13, 22, 0.6);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: var(--radius-sm);
           padding: 16px;
         }
@@ -504,15 +511,17 @@ export default function ForumPage() {
         }
 
         .comment-bubble {
-          background: rgba(255, 255, 255, 0.04);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           padding: 10px 14px;
           border-radius: 8px;
           font-size: 0.88rem;
+          color: #334155;
         }
 
         .comment-author {
           font-weight: 700;
-          color: #a5b4fc;
+          color: #4f46e5;
           margin-right: 6px;
         }
 

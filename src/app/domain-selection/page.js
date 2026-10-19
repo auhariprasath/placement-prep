@@ -318,7 +318,7 @@ export default function DomainSelectionPage() {
         .predicted-domain-name {
           font-size: 2.2rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           margin-top: 8px;
           letter-spacing: -0.02em;
         }
@@ -328,15 +328,15 @@ export default function DomainSelectionPage() {
           align-items: center;
           padding: 8px 16px;
           border-radius: var(--radius-full);
-          background: rgba(16, 185, 129, 0.15);
-          color: #34d399;
+          background: #ecfdf5;
+          color: #059669;
           font-weight: 700;
           font-size: 0.95rem;
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          border: 1px solid #a7f3d0;
         }
 
         .domain-desc {
-          color: #cbd5e1;
+          color: #334155;
           font-size: 1.05rem;
           line-height: 1.7;
           margin-bottom: 24px;
@@ -347,7 +347,7 @@ export default function DomainSelectionPage() {
           align-items: center;
           gap: 12px;
           flex-wrap: wrap;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #e2e8f0;
           padding-top: 18px;
         }
 
@@ -364,8 +364,9 @@ export default function DomainSelectionPage() {
         }
 
         .role-pill {
-          background: rgba(99, 102, 241, 0.2);
-          color: #c7d2fe;
+          background: #eef2ff;
+          color: #4338ca;
+          border: 1px solid #c7d2fe;
           font-size: 0.85rem;
           padding: 4px 12px;
         }
@@ -377,14 +378,14 @@ export default function DomainSelectionPage() {
         .section-heading {
           font-size: 1.5rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 6px;
           display: flex;
           align-items: center;
         }
 
         .section-sub {
-          color: var(--text-secondary);
+          color: #64748b;
           font-size: 0.95rem;
           margin-bottom: 24px;
         }
@@ -399,6 +400,8 @@ export default function DomainSelectionPage() {
           padding: 24px;
           display: flex;
           flex-direction: column;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .subject-card-header {
@@ -411,8 +414,9 @@ export default function DomainSelectionPage() {
         .sub-index {
           font-size: 1.3rem;
           font-weight: 800;
-          color: #818cf8;
-          background: rgba(99, 102, 241, 0.15);
+          color: #4f46e5;
+          background: #eef2ff;
+          border: 1px solid #c7d2fe;
           width: 44px;
           height: 44px;
           border-radius: 10px;
@@ -424,40 +428,40 @@ export default function DomainSelectionPage() {
         .subject-title {
           font-size: 1.15rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .subject-sem {
           font-size: 0.78rem;
-          color: var(--text-secondary);
+          color: #64748b;
           font-weight: 600;
         }
 
         .subject-desc {
-          color: #cbd5e1;
+          color: #334155;
           font-size: 0.9rem;
           line-height: 1.6;
           margin-bottom: 16px;
         }
 
         .key-topics-box {
-          background: rgba(13, 20, 36, 0.6);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           padding: 10px 14px;
           border-radius: 8px;
           font-size: 0.85rem;
-          color: #94a3b8;
+          color: #475569;
           margin-bottom: 18px;
         }
 
         .key-topics-box strong {
-          color: #cbd5e1;
+          color: #0f172a;
         }
 
         .video-box {
           margin-top: auto;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: 10px;
           padding: 14px;
         }
@@ -476,13 +480,13 @@ export default function DomainSelectionPage() {
 
         .yt-channel {
           font-size: 0.8rem;
-          color: #94a3b8;
+          color: #64748b;
           font-weight: 600;
         }
 
         .video-title {
           font-size: 0.9rem;
-          color: #ffffff;
+          color: #0f172a;
           font-weight: 600;
           margin-bottom: 12px;
           line-height: 1.4;
@@ -496,6 +500,8 @@ export default function DomainSelectionPage() {
 
         .roadmap-card {
           padding: 32px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .roadmap-phases-grid {
@@ -505,8 +511,8 @@ export default function DomainSelectionPage() {
         }
 
         .phase-card {
-          background: rgba(13, 20, 36, 0.6);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: 10px;
           padding: 20px;
         }
@@ -522,7 +528,7 @@ export default function DomainSelectionPage() {
         }
 
         .phase-card p {
-          color: #cbd5e1;
+          color: #334155;
           font-size: 0.9rem;
           line-height: 1.5;
         }

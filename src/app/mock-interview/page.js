@@ -919,24 +919,24 @@ export default function MockInterviewPage() {
         .q-counter {
           font-weight: 700;
           font-size: 0.95rem;
-          color: #a5b4fc;
+          color: #6366f1;
         }
 
         .current-question-text {
           font-size: 1.45rem;
           font-weight: 700;
           line-height: 1.45;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 16px;
         }
 
         .q-hint-box {
-          background: rgba(99, 102, 241, 0.08);
-          border-left: 3px solid #818cf8;
+          background: #eef2ff;
+          border-left: 3px solid #6366f1;
           padding: 12px 16px;
           border-radius: 0 8px 8px 0;
           font-size: 0.9rem;
-          color: #cbd5e1;
+          color: #334155;
           display: flex;
           gap: 10px;
           align-items: flex-start;
@@ -959,7 +959,7 @@ export default function MockInterviewPage() {
         .answer-label {
           font-weight: 600;
           font-size: 0.95rem;
-          color: #cbd5e1;
+          color: #334155;
         }
 
         .btn-mic {
@@ -971,7 +971,7 @@ export default function MockInterviewPage() {
           font-size: 0.85rem;
           font-weight: 600;
           background: rgba(236, 72, 153, 0.15);
-          color: #f472b6;
+          color: #ec4899;
           border: 1px solid rgba(236, 72, 153, 0.35);
           cursor: pointer;
           transition: all 0.2s ease;
@@ -992,7 +992,7 @@ export default function MockInterviewPage() {
           align-items: center;
           gap: 8px;
           font-size: 0.85rem;
-          color: #f472b6;
+          color: #ec4899;
           margin-bottom: 8px;
         }
 
@@ -1015,7 +1015,7 @@ export default function MockInterviewPage() {
           justify-content: space-between;
           align-items: center;
           margin-top: 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #e2e8f0;
           padding-top: 20px;
         }
 
@@ -1030,6 +1030,8 @@ export default function MockInterviewPage() {
 
         .eval-scorecard {
           padding: 36px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .eval-header-top {
@@ -1042,7 +1044,7 @@ export default function MockInterviewPage() {
         .eval-role-title {
           font-size: 1.8rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .hiring-decision-badge {
@@ -1076,31 +1078,32 @@ export default function MockInterviewPage() {
           align-items: center;
           justify-content: center;
           border: 3px solid;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+          background: #ffffff;
         }
 
-        .circle-overall { border-color: #ec4899; background: rgba(236, 72, 153, 0.1); }
-        .circle-tech { border-color: #6366f1; background: rgba(99, 102, 241, 0.1); }
-        .circle-comm { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-        .circle-conf { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .circle-overall { border-color: #ec4899; }
+        .circle-tech { border-color: #6366f1; }
+        .circle-comm { border-color: #10b981; }
+        .circle-conf { border-color: #f59e0b; }
 
         .metric-val {
           font-size: 1.35rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .metric-name {
           font-size: 0.8rem;
-          color: var(--text-secondary);
+          color: #64748b;
           font-weight: 600;
         }
 
         .eval-summary-text {
           font-size: 1rem;
-          color: #cbd5e1;
+          color: #334155;
           line-height: 1.7;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #e2e8f0;
           padding-top: 20px;
         }
 
@@ -1112,6 +1115,8 @@ export default function MockInterviewPage() {
 
         .feedback-card {
           padding: 28px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .border-green { border-left: 4px solid #10b981; }
@@ -1126,8 +1131,8 @@ export default function MockInterviewPage() {
           gap: 8px;
         }
 
-        .title-green { color: #34d399; }
-        .title-amber { color: #fbbf24; }
+        .title-green { color: #059669; }
+        .title-amber { color: #d97706; }
 
         .feedback-list {
           list-style: none;
@@ -1137,7 +1142,7 @@ export default function MockInterviewPage() {
           margin-bottom: 12px;
           padding-left: 20px;
           position: relative;
-          color: #cbd5e1;
+          color: #334155;
           font-size: 0.95rem;
           line-height: 1.5;
         }
@@ -1147,17 +1152,19 @@ export default function MockInterviewPage() {
           position: absolute;
           left: 4px;
           font-size: 1.2rem;
-          color: var(--text-secondary);
+          color: #6366f1;
         }
 
         .detailed-qa-section {
           padding: 32px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .section-title {
           font-size: 1.3rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 20px;
           display: flex;
           align-items: center;
@@ -1170,8 +1177,8 @@ export default function MockInterviewPage() {
         }
 
         .qa-feedback-item {
-          background: rgba(13, 20, 36, 0.6);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: var(--radius-sm);
           padding: 20px;
         }
@@ -1184,8 +1191,8 @@ export default function MockInterviewPage() {
         }
 
         .qa-num {
-          background: rgba(99, 102, 241, 0.2);
-          color: #a5b4fc;
+          background: #eef2ff;
+          color: #4f46e5;
           font-weight: 800;
           font-size: 0.8rem;
           padding: 2px 8px;
@@ -1195,7 +1202,7 @@ export default function MockInterviewPage() {
         .qa-question {
           font-size: 1.05rem;
           font-weight: 600;
-          color: #ffffff;
+          color: #0f172a;
           flex-grow: 1;
         }
 

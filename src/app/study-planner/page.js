@@ -322,6 +322,8 @@ export default function StudyPlannerPage() {
 
         .plan-summary-card {
           padding: 36px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .plan-summary-header {
@@ -336,21 +338,21 @@ export default function StudyPlannerPage() {
         .plan-title {
           font-size: 2rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           margin-top: 6px;
           margin-bottom: 8px;
         }
 
         .plan-overview-text {
-          color: #cbd5e1;
+          color: #475569;
           font-size: 1rem;
           line-height: 1.6;
           max-width: 600px;
         }
 
         .progress-box {
-          background: rgba(13, 20, 36, 0.7);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           padding: 20px 24px;
           border-radius: var(--radius-sm);
           min-width: 260px;
@@ -366,19 +368,19 @@ export default function StudyPlannerPage() {
         .progress-text {
           font-size: 0.85rem;
           font-weight: 600;
-          color: var(--text-secondary);
+          color: #475569;
         }
 
         .progress-pct {
           font-size: 1.3rem;
           font-weight: 800;
-          color: #10b981;
+          color: #059669;
         }
 
         .progress-track {
           width: 100%;
           height: 8px;
-          background: rgba(255, 255, 255, 0.08);
+          background: #e2e8f0;
           border-radius: 4px;
           overflow: hidden;
           margin-bottom: 8px;
@@ -392,20 +394,20 @@ export default function StudyPlannerPage() {
 
         .progress-sub {
           font-size: 0.75rem;
-          color: #94a3b8;
+          color: #64748b;
         }
 
         .milestones-row {
           display: flex;
           gap: 12px;
           flex-wrap: wrap;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #e2e8f0;
           padding-top: 20px;
         }
 
         .milestone-chip {
-          background: rgba(99, 102, 241, 0.12);
-          border: 1px solid rgba(99, 102, 241, 0.3);
+          background: #eef2ff;
+          border: 1px solid #c7d2fe;
           border-radius: 8px;
           padding: 8px 14px;
           display: flex;
@@ -415,11 +417,11 @@ export default function StudyPlannerPage() {
 
         .m-phase {
           font-weight: 700;
-          color: #a5b4fc;
+          color: #4f46e5;
         }
 
         .m-goal {
-          color: #cbd5e1;
+          color: #334155;
         }
 
         /* Daily Plans */
@@ -431,13 +433,15 @@ export default function StudyPlannerPage() {
 
         .day-card {
           padding: 24px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           transition: all 0.25s ease;
         }
 
         .day-done {
           opacity: 0.75;
-          border-color: rgba(16, 185, 129, 0.35);
-          background: rgba(16, 185, 129, 0.04);
+          border-color: #a7f3d0;
+          background: #f0fdf4;
         }
 
         .day-card-left {
@@ -451,25 +455,26 @@ export default function StudyPlannerPage() {
           width: 28px;
           height: 28px;
           border-radius: 6px;
-          border: 2px solid rgba(255, 255, 255, 0.25);
-          background: transparent;
+          border: 2px solid #cbd5e1;
+          background: #ffffff;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: white;
+          color: transparent;
           font-size: 0.9rem;
           transition: all 0.2s ease;
           margin-top: 3px;
         }
 
         .check-btn:hover {
-          border-color: #34d399;
+          border-color: #10b981;
         }
 
         .check-btn.checked {
           background: #10b981;
           border-color: #10b981;
+          color: white;
         }
 
         .day-badge-line {
@@ -482,14 +487,14 @@ export default function StudyPlannerPage() {
         .day-number {
           font-weight: 800;
           font-size: 0.9rem;
-          color: #818cf8;
+          color: #4f46e5;
         }
 
         .day-hours {
           display: flex;
           align-items: center;
           font-size: 0.8rem;
-          color: var(--text-secondary);
+          color: #64748b;
         }
 
         .priority-pill {
@@ -498,21 +503,21 @@ export default function StudyPlannerPage() {
           padding: 2px 8px;
           border-radius: 999px;
         }
-        .priority-1 { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-        .priority-2 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-        .priority-3 { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        .priority-1 { background: #fee2e2; color: #dc2626; }
+        .priority-2 { background: #fef3c7; color: #d97706; }
+        .priority-3 { background: #e0e7ff; color: #4338ca; }
 
         .day-topic {
           font-size: 1.2rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .subtopics-list {
           margin-left: 44px;
           margin-bottom: 12px;
           font-size: 0.9rem;
-          color: #cbd5e1;
+          color: #334155;
         }
 
         .subtopics-list ul {
@@ -527,12 +532,12 @@ export default function StudyPlannerPage() {
 
         .day-tip {
           margin-left: 44px;
-          background: rgba(245, 158, 11, 0.08);
+          background: #fffbeb;
           border-left: 3px solid #f59e0b;
           padding: 8px 14px;
           border-radius: 0 6px 6px 0;
           font-size: 0.85rem;
-          color: #cbd5e1;
+          color: #78350f;
           display: flex;
           gap: 8px;
           align-items: flex-start;
@@ -545,7 +550,7 @@ export default function StudyPlannerPage() {
           align-items: center;
           gap: 8px;
           font-size: 0.85rem;
-          color: #a5b4fc;
+          color: #4f46e5;
         }
 
         @media (max-width: 768px) {

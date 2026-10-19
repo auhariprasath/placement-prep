@@ -241,14 +241,14 @@ int main() {
 
         .bar-label {
           font-size: 0.85rem;
-          color: var(--text-secondary);
+          color: #64748b;
           font-weight: 600;
         }
 
         .lang-btn {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          color: #334155;
           padding: 6px 12px;
           border-radius: var(--radius-sm);
           font-size: 0.8rem;
@@ -258,7 +258,7 @@ int main() {
         }
 
         .lang-btn:hover {
-          background: rgba(255, 255, 255, 0.12);
+          background: #e2e8f0;
         }
 
         .lang-btn.active {
@@ -285,10 +285,10 @@ int main() {
         .code-textarea {
           width: 100%;
           min-height: 420px;
-          background: #060911;
-          border: 1px solid var(--border-light);
+          background: #0f172a;
+          border: 1px solid #cbd5e1;
           border-radius: var(--radius-sm);
-          color: #e2e8f0;
+          color: #f8fafc;
           font-family: var(--font-mono);
           font-size: 0.95rem;
           line-height: 1.6;
@@ -298,7 +298,7 @@ int main() {
         }
 
         .code-textarea:focus {
-          border-color: #818cf8;
+          border-color: #6366f1;
         }
 
         .stdin-box {
@@ -308,17 +308,18 @@ int main() {
         .stdin-label {
           display: block;
           font-size: 0.8rem;
-          color: var(--text-secondary);
+          color: #475569;
           margin-bottom: 4px;
+          font-weight: 600;
         }
 
         .stdin-input {
           width: 100%;
-          background: rgba(13, 20, 36, 0.7);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #cbd5e1;
           padding: 8px 12px;
           border-radius: var(--radius-sm);
-          color: white;
+          color: #0f172a;
           font-family: var(--font-mono);
           font-size: 0.85rem;
           outline: none;

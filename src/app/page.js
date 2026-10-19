@@ -269,10 +269,10 @@ export default function HomePage() {
           font-size: 0.85rem;
           font-weight: 700;
           letter-spacing: 0.04em;
-          background: rgba(99, 102, 241, 0.14);
-          color: #c7d2fe;
-          border: 1px solid rgba(99, 102, 241, 0.35);
-          box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+          background: #eef2ff;
+          color: #4338ca;
+          border: 1px solid #c7d2fe;
+          box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
         }
 
         .sparkle-icon {
@@ -286,11 +286,11 @@ export default function HomePage() {
           letter-spacing: -0.03em;
           max-width: 900px;
           margin: 0 auto 20px;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .hero-title-gradient {
-          background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #38bdf8 100%);
+          background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #0284c7 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
@@ -333,22 +333,24 @@ export default function HomePage() {
         .stat-card {
           padding: 24px;
           text-align: center;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .stat-num {
           display: block;
           font-size: 2rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 6px;
-          background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+          background: linear-gradient(135deg, #0f172a 40%, #4f46e5 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
 
         .stat-label {
           font-size: 0.85rem;
-          color: var(--text-secondary);
+          color: #64748b;
           font-weight: 500;
         }
 
@@ -369,6 +371,8 @@ export default function HomePage() {
           flex-direction: column;
           text-decoration: none;
           position: relative;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .feature-card-top {
@@ -387,7 +391,7 @@ export default function HomePage() {
           justify-content: center;
           font-size: 1.35rem;
           color: white;
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .feat-pill {
@@ -395,22 +399,22 @@ export default function HomePage() {
           font-weight: 700;
           padding: 3px 10px;
           border-radius: 999px;
-          border: 1px solid;
-          background: rgba(255, 255, 255, 0.04);
-          color: #cbd5e1;
+          border: 1px solid #cbd5e1;
+          background: #f8fafc;
+          color: #475569;
           letter-spacing: 0.03em;
         }
 
         .feat-card-title {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 12px;
           letter-spacing: -0.01em;
         }
 
         .feat-card-desc {
-          color: var(--text-secondary);
+          color: #475569;
           font-size: 0.92rem;
           line-height: 1.6;
           margin-bottom: 20px;
@@ -418,14 +422,14 @@ export default function HomePage() {
         }
 
         .feat-card-footer {
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid #f1f5f9;
           padding-top: 14px;
         }
 
         .feat-action-link {
           font-size: 0.88rem;
           font-weight: 600;
-          color: #a5b4fc;
+          color: #4f46e5;
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -434,7 +438,7 @@ export default function HomePage() {
 
         .feature-card:hover .feat-action-link {
           gap: 10px;
-          color: #ffffff;
+          color: #4338ca;
         }
 
         .arrow-icon {

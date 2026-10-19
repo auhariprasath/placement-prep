@@ -69,8 +69,8 @@ export default function Footer() {
 
       <style jsx>{`
         .footer-root {
-          background: #060911;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          background: #ffffff;
+          border-top: 1px solid #e2e8f0;
           padding: 60px 0 30px;
           position: relative;
           z-index: 10;
@@ -105,11 +105,11 @@ export default function Footer() {
         .footer-title {
           font-weight: 800;
           font-size: 1.2rem;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .footer-desc {
-          color: var(--text-secondary);
+          color: #64748b;
           font-size: 0.9rem;
           line-height: 1.6;
           margin-bottom: 16px;
@@ -124,11 +124,11 @@ export default function Footer() {
           width: 36px;
           height: 36px;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.06);
+          background: #f1f5f9;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #cbd5e1;
+          color: #475569;
           transition: all 0.2s ease;
         }
 
@@ -139,8 +139,8 @@ export default function Footer() {
         }
 
         .footer-col h4 {
-          color: #f1f5f9;
-          font-size: 0.95rem;
+          color: #0f172a;
+          font-size: 0.92rem;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -156,24 +156,24 @@ export default function Footer() {
         }
 
         .footer-col a {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.9rem;
           transition: color 0.2s ease;
         }
 
         .footer-col a:hover {
-          color: #ffffff;
+          color: #4f46e5;
         }
 
         .deploy-badge-box {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           padding: 16px;
           border-radius: 12px;
         }
 
         .footer-bottom {
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid #f1f5f9;
           padding-top: 24px;
           text-align: center;
           color: #64748b;

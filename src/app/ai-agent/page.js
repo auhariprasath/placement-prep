@@ -208,15 +208,18 @@ export default function AIAgentPage() {
           flex-direction: column;
           height: 650px;
           overflow: hidden;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         .nav-redirect-banner {
           max-width: 900px;
           margin: 0 auto 16px;
           padding: 14px 20px;
-          background: rgba(99, 102, 241, 0.2);
-          border: 1px solid rgba(99, 102, 241, 0.4);
-          color: #c7d2fe;
+          background: #eef2ff;
+          border: 1px solid #c7d2fe;
+          color: #4338ca;
           display: flex;
           align-items: center;
           gap: 12px;
@@ -241,6 +244,7 @@ export default function AIAgentPage() {
           display: flex;
           flex-direction: column;
           gap: 18px;
+          background: #ffffff;
         }
 
         .message-row {
@@ -295,9 +299,9 @@ export default function AIAgentPage() {
         }
 
         .bubble-ai {
-          background: rgba(18, 26, 45, 0.9);
-          border: 1px solid var(--border-light);
-          color: #f1f5f9;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+          color: #0f172a;
           border-top-left-radius: 4px;
         }
 
@@ -310,7 +314,7 @@ export default function AIAgentPage() {
         .typing-bubble {
           display: flex;
           align-items: center;
-          color: #a5b4fc;
+          color: #6366f1;
           font-size: 0.88rem;
         }
 
@@ -323,8 +327,8 @@ export default function AIAgentPage() {
 
         .quick-prompts-bar {
           padding: 10px 20px;
-          background: rgba(13, 20, 36, 0.5);
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          background: #f8fafc;
+          border-top: 1px solid #e2e8f0;
           display: flex;
           align-items: center;
           gap: 10px;
@@ -334,7 +338,7 @@ export default function AIAgentPage() {
         .quick-label {
           font-size: 0.8rem;
           font-weight: 600;
-          color: var(--text-secondary);
+          color: #64748b;
           display: flex;
           align-items: center;
           gap: 4px;
@@ -347,9 +351,9 @@ export default function AIAgentPage() {
         }
 
         .quick-chip-btn {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          color: #334155;
           padding: 5px 12px;
           border-radius: var(--radius-full);
           font-size: 0.75rem;
@@ -359,32 +363,33 @@ export default function AIAgentPage() {
         }
 
         .quick-chip-btn:hover {
-          background: rgba(99, 102, 241, 0.2);
-          border-color: rgba(99, 102, 241, 0.4);
-          color: white;
+          background: #eef2ff;
+          border-color: #c7d2fe;
+          color: #4338ca;
         }
 
         .chat-input-bar {
           display: flex;
           gap: 12px;
           padding: 16px 20px;
-          background: rgba(9, 13, 22, 0.8);
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          background: #ffffff;
+          border-top: 1px solid #e2e8f0;
         }
 
         .chat-input-field {
           flex: 1;
-          background: rgba(18, 26, 45, 0.8);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #cbd5e1;
           padding: 12px 18px;
           border-radius: var(--radius-sm);
-          color: white;
+          color: #0f172a;
           font-size: 0.95rem;
           outline: none;
         }
 
         .chat-input-field:focus {
-          border-color: #818cf8;
+          border-color: #6366f1;
+          background: #ffffff;
         }
 
         .send-btn {

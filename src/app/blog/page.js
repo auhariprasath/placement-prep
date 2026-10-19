@@ -177,6 +177,8 @@ export default function BlogPage() {
           display: flex;
           gap: 12px;
           align-items: center;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .search-wrap {
@@ -186,14 +188,14 @@ export default function BlogPage() {
         }
 
         .search-icon {
-          color: #818cf8;
+          color: #6366f1;
           margin-right: 10px;
         }
 
         .search-input {
           background: transparent;
           border: none;
-          color: white;
+          color: #0f172a;
           width: 100%;
           outline: none;
           font-size: 0.95rem;
@@ -210,6 +212,8 @@ export default function BlogPage() {
           display: flex;
           flex-direction: column;
           cursor: pointer;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .article-top {
@@ -221,7 +225,7 @@ export default function BlogPage() {
 
         .read-time {
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: #64748b;
           display: flex;
           align-items: center;
         }
@@ -229,13 +233,13 @@ export default function BlogPage() {
         .article-title {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           line-height: 1.4;
           margin-bottom: 12px;
         }
 
         .article-summary {
-          color: #cbd5e1;
+          color: #475569;
           font-size: 0.9rem;
           line-height: 1.6;
           margin-bottom: 20px;
@@ -243,7 +247,7 @@ export default function BlogPage() {
         }
 
         .article-footer {
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #f1f5f9;
           padding-top: 14px;
           display: flex;
           justify-content: space-between;
@@ -252,15 +256,15 @@ export default function BlogPage() {
 
         .author-line {
           font-size: 0.85rem;
-          color: var(--text-secondary);
+          color: #64748b;
           display: flex;
           align-items: center;
         }
 
         .like-btn {
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+          color: #475569;
           padding: 4px 12px;
           border-radius: var(--radius-full);
           font-size: 0.8rem;
@@ -273,8 +277,8 @@ export default function BlogPage() {
         }
 
         .like-btn:hover {
-          background: rgba(236, 72, 153, 0.2);
-          color: white;
+          background: #fdf2f8;
+          color: #be185d;
         }
 
         /* Modal */
@@ -284,7 +288,8 @@ export default function BlogPage() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.75);
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -297,8 +302,10 @@ export default function BlogPage() {
           max-width: 760px;
           max-height: 85vh;
           overflow-y: auto;
-          background: #0d1424;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: var(--radius-md);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
           padding: 36px;
         }
 
@@ -310,9 +317,9 @@ export default function BlogPage() {
         }
 
         .close-btn {
-          background: rgba(255, 255, 255, 0.08);
+          background: #f1f5f9;
           border: none;
-          color: white;
+          color: #475569;
           width: 32px;
           height: 32px;
           border-radius: 50%;

@@ -19,7 +19,9 @@ import {
   FaGraduationCap,
   FaCheckCircle,
   FaChevronRight,
-  FaSparkles
+  FaSparkles,
+  FaKey,
+  FaCog
 } from "react-icons/fa";
 
 export default function Navbar() {
@@ -73,6 +75,18 @@ export default function Navbar() {
       items: [
         { href: "/forum", label: "Community Forum", icon: <FaComments /> },
         { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
+      ]
+    },
+    {
+      title: "System & API",
+      items: [
+        {
+          href: "/settings",
+          label: "API Keys & Settings",
+          icon: <FaKey />,
+          badge: "API",
+          badgeColor: "blue",
+        },
       ]
     }
   ];
@@ -184,14 +198,13 @@ export default function Navbar() {
           left: 0;
           right: 0;
           height: 60px;
-          background: rgba(9, 13, 22, 0.95);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: #ffffff;
+          border-bottom: 1px solid #e2e8f0;
           z-index: 1000;
           align-items: center;
           justify-content: space-between;
           padding: 0 16px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .mobile-brand {
@@ -201,15 +214,21 @@ export default function Navbar() {
           text-decoration: none;
         }
 
+        .mobile-brand .brand-title {
+          font-weight: 800;
+          font-size: 1.12rem;
+          color: #0f172a;
+        }
+
         .mobile-hamburger-btn {
           width: 40px;
           height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #ffffff;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          color: #0f172a;
           border-radius: 8px;
           font-size: 1.15rem;
           cursor: pointer;
@@ -217,7 +236,7 @@ export default function Navbar() {
         }
 
         .mobile-hamburger-btn:hover {
-          background: rgba(255, 255, 255, 0.12);
+          background: #e2e8f0;
         }
 
         /* Backdrop */
@@ -403,6 +422,12 @@ export default function Navbar() {
           background: linear-gradient(135deg, #ec4899, #8b5cf6);
           color: #ffffff;
           box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+        }
+
+        .badge-blue {
+          background: linear-gradient(135deg, #3b82f6, #6366f1);
+          color: #ffffff;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
         }
 
         .active-glow-bar {

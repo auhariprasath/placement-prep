@@ -164,6 +164,8 @@ export default function JobSearchPage() {
         .filter-card {
           padding: 20px 24px;
           margin-bottom: 32px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .search-form {
@@ -176,8 +178,8 @@ export default function JobSearchPage() {
         .input-wrap {
           display: flex;
           align-items: center;
-          background: rgba(13, 20, 36, 0.7);
-          border: 1px solid var(--border-light);
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
           border-radius: var(--radius-sm);
           padding: 4px 14px;
         }
@@ -186,14 +188,14 @@ export default function JobSearchPage() {
         .flex-1 { flex: 1; min-width: 160px; }
 
         .field-icon {
-          color: #818cf8;
+          color: #6366f1;
           margin-right: 10px;
         }
 
         .clean-input, .clean-select {
           background: transparent;
           border: none;
-          color: white;
+          color: #0f172a;
           padding: 10px 0;
           font-size: 0.95rem;
           width: 100%;
@@ -201,8 +203,8 @@ export default function JobSearchPage() {
         }
 
         .clean-select option {
-          background: #090d16;
-          color: white;
+          background: #ffffff;
+          color: #0f172a;
         }
 
         .search-submit-btn {
@@ -221,6 +223,8 @@ export default function JobSearchPage() {
           align-items: center;
           justify-content: space-between;
           gap: 20px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
         }
 
         .job-card-main {
@@ -241,7 +245,7 @@ export default function JobSearchPage() {
           color: white;
           font-size: 1.5rem;
           font-weight: 800;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
           flex-shrink: 0;
         }
 
@@ -260,7 +264,7 @@ export default function JobSearchPage() {
         .job-title {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .job-type-pill {
@@ -268,28 +272,28 @@ export default function JobSearchPage() {
           font-weight: 700;
           padding: 2px 8px;
           border-radius: 999px;
-          background: rgba(16, 185, 129, 0.15);
-          color: #34d399;
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          background: #ecfdf5;
+          color: #059669;
+          border: 1px solid #a7f3d0;
         }
 
         .company-sub-line {
           display: flex;
           gap: 16px;
           font-size: 0.85rem;
-          color: #94a3b8;
+          color: #64748b;
           margin-bottom: 12px;
           flex-wrap: wrap;
         }
 
         .comp-sal {
-          color: #34d399;
+          color: #059669;
           font-weight: 600;
         }
 
         .job-desc {
           font-size: 0.9rem;
-          color: #cbd5e1;
+          color: #475569;
           line-height: 1.6;
           margin-bottom: 14px;
         }
@@ -301,12 +305,12 @@ export default function JobSearchPage() {
         }
 
         .skill-pill {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light);
+          background: #eef2ff;
+          border: 1px solid #c7d2fe;
           padding: 3px 10px;
           border-radius: 6px;
           font-size: 0.75rem;
-          color: #c7d2fe;
+          color: #4338ca;
         }
 
         .apply-btn {
