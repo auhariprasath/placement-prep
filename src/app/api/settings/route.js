@@ -4,8 +4,6 @@ import { getActiveApiKey, setActiveApiKey, testGroqApiKey, maskKey } from "@/lib
 export async function GET() {
   try {
     const groqKey = getActiveApiKey("GROQ_API_KEY");
-    const supabaseUrl = getActiveApiKey("NEXT_PUBLIC_SUPABASE_URL");
-    const supabaseAnonKey = getActiveApiKey("NEXT_PUBLIC_SUPABASE_ANON_KEY");
     const groqModel = getActiveApiKey("GROQ_MODEL") || "llama-3.3-70b-versatile";
 
     return NextResponse.json({
@@ -14,9 +12,6 @@ export async function GET() {
         groqApiKeyMasked: maskKey(groqKey),
         isGroqConfigured: Boolean(groqKey && groqKey.startsWith("gsk_")),
         groqModel,
-        supabaseUrl: supabaseUrl || "https://lhfroegebpddmjgnwdvk.supabase.co",
-        supabaseAnonKeyMasked: maskKey(supabaseAnonKey),
-        isSupabaseConfigured: Boolean(supabaseAnonKey && supabaseAnonKey.length > 20),
       },
     });
   } catch (error) {
@@ -33,15 +28,21 @@ export async function POST(req) {
     const body = await req.json().catch(() => ({}));
     const {
       groqApiKey,
-      supabaseUrl,
-      supabaseAnonKey,
       groqModel,
       testOnly = false,
     } = body;
 
+    const currentKey = groqApiKey || getActiveApiKey("GROQ_API_KEY");
+
     // If client just wants to test a Groq key
-    if (testOnly && groqApiKey) {
-      const testResult = await testGroqApiKey(groqApiKey, groqModel);
+    if (testOnly) {
+      if (!currentKey) {
+        return NextResponse.json({
+          success: false,
+          message: "No Groq API Key provided to test",
+        });
+      }
+      const testResult = await testGroqApiKey(currentKey, groqModel);
       return NextResponse.json({
         success: testResult.valid,
         message: testResult.message,
@@ -70,22 +71,6 @@ export async function POST(req) {
       }
     }
 
-    if (supabaseUrl !== undefined && supabaseUrl !== null) {
-      const cleanUrl = supabaseUrl.trim();
-      if (cleanUrl) {
-        setActiveApiKey("NEXT_PUBLIC_SUPABASE_URL", cleanUrl);
-        updates.supabaseUrl = true;
-      }
-    }
-
-    if (supabaseAnonKey !== undefined && supabaseAnonKey !== null) {
-      const cleanKey = supabaseAnonKey.trim();
-      if (cleanKey) {
-        setActiveApiKey("NEXT_PUBLIC_SUPABASE_ANON_KEY", cleanKey);
-        updates.supabaseAnonKey = true;
-      }
-    }
-
     if (groqModel) {
       setActiveApiKey("GROQ_MODEL", groqModel.trim());
       updates.groqModel = true;
@@ -93,7 +78,7 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: "API Keys and Settings updated successfully! All tools are now using these active keys.",
+      message: "Groq API credentials updated successfully! All tools are now using these active settings.",
       updates,
       groqValidation,
     });

@@ -6,7 +6,7 @@ if (!global.__APP_RUNTIME_CONFIG) {
   global.__APP_RUNTIME_CONFIG = {
     GROQ_API_KEY: process.env.GROQ_API_KEY || "",
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "https://lhfroegebpddmjgnwdvk.supabase.co",
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxoZnJvZWdlYnBkZG1qZ253ZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTI5OTAsImV4cCI6MjEwNzk4ODk5MH0.BhbLNlcgWyfb6kdiA7crcZHEeoUeE7MQEBb-7RRna4s",
     GROQ_MODEL: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
   };
 }

@@ -12,17 +12,14 @@ import {
   FaRobot,
   FaExternalLinkAlt,
   FaSave,
-  FaSyncAlt,
-  FaDatabase
+  FaShieldAlt,
+  FaInfoCircle
 } from "react-icons/fa";
 
 export default function SettingsPage() {
   const [groqKey, setGroqKey] = useState("");
   const [showGroqKey, setShowGroqKey] = useState(false);
   const [groqModel, setGroqModel] = useState("llama-3.3-70b-versatile");
-  const [supabaseUrl, setSupabaseUrl] = useState("https://lhfroegebpddmjgnwdvk.supabase.co");
-  const [supabaseAnonKey, setSupabaseAnonKey] = useState("");
-  const [showSupabaseKey, setShowSupabaseKey] = useState(false);
 
   // Status & Feedback
   const [loading, setLoading] = useState(true);
@@ -41,7 +38,6 @@ export default function SettingsPage() {
       if (data.success && data.settings) {
         setServerSettings(data.settings);
         setGroqModel(data.settings.groqModel || "llama-3.3-70b-versatile");
-        setSupabaseUrl(data.settings.supabaseUrl || "https://lhfroegebpddmjgnwdvk.supabase.co");
       }
 
       // Check if user has an override in localStorage
@@ -67,7 +63,8 @@ export default function SettingsPage() {
 
   // Test Groq Key
   const handleTestGroqKey = async () => {
-    if (!groqKey.trim()) {
+    const keyToTest = groqKey.trim() || (serverSettings?.isGroqConfigured ? "CURRENT_SERVER_KEY" : "");
+    if (!keyToTest) {
       showToast("Please enter an API Key to test", true);
       return;
     }
@@ -80,7 +77,7 @@ export default function SettingsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          groqApiKey: groqKey.trim(),
+          groqApiKey: groqKey.trim() || undefined,
           groqModel,
           testOnly: true,
         }),
@@ -110,15 +107,10 @@ export default function SettingsPage() {
     try {
       const payload = {
         groqModel,
-        supabaseUrl: supabaseUrl.trim(),
       };
 
       if (groqKey.trim()) {
         payload.groqApiKey = groqKey.trim();
-      }
-
-      if (supabaseAnonKey.trim()) {
-        payload.supabaseAnonKey = supabaseAnonKey.trim();
       }
 
       const res = await fetch("/api/settings", {
@@ -134,7 +126,7 @@ export default function SettingsPage() {
         if (groqKey.trim()) {
           localStorage.setItem("pp_groq_api_key", groqKey.trim());
         }
-        showToast("All settings saved! Entire software is now using this API key.");
+        showToast("Groq API key saved! Entire software is now using this active key.");
         loadSettings();
       } else {
         showToast(data.error || "Failed to save settings", true);
@@ -150,12 +142,12 @@ export default function SettingsPage() {
     <div className="page-wrapper container">
       <div className="page-header">
         <span className="badge-tag">
-          <FaKey style={{ marginRight: "6px" }} /> API & System Settings
+          <FaKey style={{ marginRight: "6px" }} /> AI Configuration
         </span>
-        <h1 className="page-title">Manage API Keys & Configuration</h1>
+        <h1 className="page-title">Groq API Key Settings</h1>
         <p className="page-subtitle">
-          If an API key expires or needs updating, enter your new key below.
-          The entire placement platform will immediately switch to using the new key.
+          Manage your Groq AI credentials and model selection. If your API key ever expires,
+          simply paste the new key below and click Save — all features will instantly switch to it.
         </p>
       </div>
 
@@ -170,17 +162,17 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <div className="settings-grid">
+      <div className="settings-container">
         {/* Groq AI Settings Card */}
         <div className="settings-card card-glass">
           <div className="card-top-header">
             <div className="icon-header-box">
               <FaRobot />
             </div>
-            <div>
-              <h2 className="card-title">Groq AI Engine Key</h2>
+            <div className="header-text-group">
+              <h2 className="card-title">Groq AI Engine Credentials</h2>
               <p className="card-desc">
-                Powers AI Voice Mock Interviews, Domain Prediction, Dynamic Placement Questions, and Copilot.
+                Powers AI Mock Interviews, Domain Prediction, Dynamic Placement Questions, and Copilot.
               </p>
             </div>
             <div className="status-indicator-badge">
@@ -196,181 +188,134 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">
-              Groq API Key
-              {serverSettings?.groqApiKeyMasked && (
-                <span className="current-key-badge">
-                  Current Key: {serverSettings.groqApiKeyMasked}
-                </span>
-              )}
-            </label>
-            <div className="input-with-action">
-              <input
-                type={showGroqKey ? "text" : "password"}
-                className="form-input key-input"
-                placeholder="Paste your gsk_... API key here"
-                value={groqKey}
-                onChange={(e) => {
-                  setGroqKey(e.target.value);
-                  setGroqTestStatus(null);
-                }}
-              />
+          <form onSubmit={handleSaveSettings}>
+            <div className="form-group">
+              <label className="form-label">
+                Groq API Key
+                {serverSettings?.groqApiKeyMasked && (
+                  <span className="current-key-badge">
+                    Current Active: {serverSettings.groqApiKeyMasked}
+                  </span>
+                )}
+              </label>
+              <div className="input-with-action">
+                <input
+                  type={showGroqKey ? "text" : "password"}
+                  className="form-input key-input"
+                  placeholder="Paste your gsk_... API key here"
+                  value={groqKey}
+                  onChange={(e) => {
+                    setGroqKey(e.target.value);
+                    setGroqTestStatus(null);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="btn-toggle-view"
+                  onClick={() => setShowGroqKey(!showGroqKey)}
+                  aria-label="Toggle key visibility"
+                >
+                  {showGroqKey ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              <span className="field-hint">
+                Starts with <code>gsk_</code>. Saved directly to server runtime and <code>.env.local</code>.
+              </span>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">AI Model</label>
+              <select
+                value={groqModel}
+                onChange={(e) => setGroqModel(e.target.value)}
+                className="form-select"
+              >
+                <option value="llama-3.3-70b-versatile">
+                  Llama 3.3 70B Versatile (Recommended — Deepest reasoning & best interview feedback)
+                </option>
+                <option value="llama-3.1-8b-instant">
+                  Llama 3.1 8B Instant (Ultra-fast latency)
+                </option>
+              </select>
+            </div>
+
+            {/* Test Status Feedback */}
+            {groqTestStatus && (
+              <div className={`test-status-box ${groqTestStatus.valid ? "valid" : "invalid"}`}>
+                {groqTestStatus.valid ? <FaCheckCircle /> : <FaExclamationTriangle />}
+                <span>{groqTestStatus.message}</span>
+              </div>
+            )}
+
+            <div className="action-buttons-bar">
               <button
                 type="button"
-                className="btn-toggle-view"
-                onClick={() => setShowGroqKey(!showGroqKey)}
-                aria-label="Toggle key visibility"
+                className="btn btn-secondary"
+                onClick={handleTestGroqKey}
+                disabled={testingGroq || (!groqKey.trim() && !serverSettings?.isGroqConfigured)}
               >
-                {showGroqKey ? <FaEyeSlash /> : <FaEye />}
+                {testingGroq ? (
+                  <>
+                    <FaSpinner className="spin" /> Verifying Connection...
+                  </>
+                ) : (
+                  <>
+                    <FaServer /> Test API Key
+                  </>
+                )}
+              </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={saving}
+              >
+                {saving ? (
+                  <>
+                    <FaSpinner className="spin" /> Applying...
+                  </>
+                ) : (
+                  <>
+                    <FaSave /> Save & Apply Key
+                  </>
+                )}
               </button>
             </div>
+          </form>
+        </div>
+
+        {/* Quick Help & Key Rotation Guide Card */}
+        <div className="settings-guide-card card-glass">
+          <div className="guide-header">
+            <FaShieldAlt className="guide-icon" />
+            <h3 className="guide-title">How Groq Key Rotation Works</h3>
           </div>
+          <p className="guide-text">
+            When you enter and save a new Groq API key:
+          </p>
+          <ul className="guide-list">
+            <li>
+              <strong>Instant Live Switch:</strong> In-memory server runtime immediately routes all new AI requests to the updated key without server reboot.
+            </li>
+            <li>
+              <strong>Safe Persistence:</strong> The key is safely updated in <code>.env.local</code> so it persists across local restarts.
+            </li>
+            <li>
+              <strong>Client Fallback:</strong> Also saved in browser localStorage to ensure uninterrupted experience.
+            </li>
+          </ul>
 
-          <div className="form-group">
-            <label className="form-label">AI Model</label>
-            <select
-              value={groqModel}
-              onChange={(e) => setGroqModel(e.target.value)}
-              className="form-select"
-            >
-              <option value="llama-3.3-70b-versatile">
-                Llama 3.3 70B Versatile (Recommended - Deepest reasoning & best interview quality)
-              </option>
-              <option value="llama-3.1-8b-instant">
-                Llama 3.1 8B Instant (Ultra-fast response & highest throughput)
-              </option>
-            </select>
-          </div>
-
-          {/* Test Status Banner */}
-          {groqTestStatus && (
-            <div className={`test-status-box ${groqTestStatus.valid ? "valid" : "invalid"}`}>
-              {groqTestStatus.valid ? <FaCheckCircle /> : <FaExclamationTriangle />}
-              <span>{groqTestStatus.message}</span>
-            </div>
-          )}
-
-          <div className="card-actions-row">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleTestGroqKey}
-              disabled={testingGroq || !groqKey.trim()}
-            >
-              {testingGroq ? (
-                <>
-                  <FaSpinner className="spin" /> Verifying Key...
-                </>
-              ) : (
-                <>
-                  <FaServer /> Test Key Validity
-                </>
-              )}
-            </button>
-
+          <div className="guide-footer">
             <a
               href="https://console.groq.com/keys"
               target="_blank"
               rel="noopener noreferrer"
-              className="groq-help-link"
+              className="groq-external-link"
             >
-              Get a Free Groq Key <FaExternalLinkAlt style={{ fontSize: "0.75rem" }} />
+              Get a Free Groq API Key <FaExternalLinkAlt style={{ fontSize: "0.8rem" }} />
             </a>
           </div>
         </div>
-
-        {/* Supabase Cloud Database Card */}
-        <div className="settings-card card-glass">
-          <div className="card-top-header">
-            <div className="icon-header-box supabase-icon">
-              <FaDatabase />
-            </div>
-            <div>
-              <h2 className="card-title">Supabase Database Connection</h2>
-              <p className="card-desc">
-                Stores your completed mock interviews, community discussion posts, and candidate profiles.
-              </p>
-            </div>
-            <div className="status-indicator-badge">
-              {serverSettings?.isSupabaseConfigured ? (
-                <span className="status-pill active">
-                  <FaCheckCircle /> Connected
-                </span>
-              ) : (
-                <span className="status-pill neutral">
-                  Local Memory Mode
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Supabase Project URL</label>
-            <input
-              type="text"
-              className="form-input"
-              value={supabaseUrl}
-              onChange={(e) => setSupabaseUrl(e.target.value)}
-              placeholder="https://your-project.supabase.co"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">
-              Supabase Anon / Public Key
-              {serverSettings?.supabaseAnonKeyMasked && (
-                <span className="current-key-badge">
-                  Current Key: {serverSettings.supabaseAnonKeyMasked}
-                </span>
-              )}
-            </label>
-            <div className="input-with-action">
-              <input
-                type={showSupabaseKey ? "text" : "password"}
-                className="form-input key-input"
-                placeholder="Paste your Supabase anon/public key here"
-                value={supabaseAnonKey}
-                onChange={(e) => setSupabaseAnonKey(e.target.value)}
-              />
-              <button
-                type="button"
-                className="btn-toggle-view"
-                onClick={() => setShowSupabaseKey(!showSupabaseKey)}
-                aria-label="Toggle key visibility"
-              >
-                {showSupabaseKey ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Global Save Action Bar */}
-      <div className="settings-save-bar card-glass">
-        <div className="save-bar-info">
-          <h3 className="save-bar-title">Apply & Activate New Keys</h3>
-          <p className="save-bar-desc">
-            Clicking Save updates both the server runtime environment and your configuration.
-            No server restart required.
-          </p>
-        </div>
-        <button
-          type="button"
-          className="btn btn-primary btn-save-all"
-          onClick={handleSaveSettings}
-          disabled={saving}
-        >
-          {saving ? (
-            <>
-              <FaSpinner className="spin" /> Updating Software Keys...
-            </>
-          ) : (
-            <>
-              <FaSave /> Save & Apply Across Entire App
-            </>
-          )}
-        </button>
       </div>
 
       <style jsx>{`
@@ -409,43 +354,44 @@ export default function SettingsPage() {
           }
         }
 
-        .settings-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 28px;
-          margin-bottom: 32px;
+        .settings-container {
+          max-width: 820px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
         }
 
         .settings-card {
           padding: 32px;
-          display: flex;
-          flex-direction: column;
+          border-radius: 16px;
         }
 
         .card-top-header {
           display: flex;
           align-items: flex-start;
           gap: 16px;
-          margin-bottom: 24px;
+          margin-bottom: 26px;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #e2e8f0;
         }
 
         .icon-header-box {
           width: 44px;
           height: 44px;
           border-radius: 10px;
-          background: var(--grad-primary);
+          background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
           color: white;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 1.25rem;
           flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
         }
 
-        .icon-header-box.supabase-icon {
-          background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        .header-text-group {
+          flex: 1;
         }
 
         .card-title {
@@ -488,12 +434,6 @@ export default function SettingsPage() {
           border: 1px solid #fde68a;
         }
 
-        .status-pill.neutral {
-          background: #f1f5f9;
-          color: #64748b;
-          border: 1px solid #e2e8f0;
-        }
-
         .current-key-badge {
           display: inline-block;
           margin-left: 10px;
@@ -502,7 +442,35 @@ export default function SettingsPage() {
           color: #6366f1;
           background: #eef2ff;
           padding: 2px 8px;
+          border-radius: 6px;
+        }
+
+        .form-group {
+          margin-bottom: 22px;
+        }
+
+        .form-label {
+          display: flex;
+          align-items: center;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #1e293b;
+          margin-bottom: 8px;
+        }
+
+        .field-hint {
+          display: block;
+          font-size: 0.78rem;
+          color: #64748b;
+          margin-top: 6px;
+        }
+
+        .field-hint code {
+          background: #f1f5f9;
+          padding: 1px 4px;
           border-radius: 4px;
+          font-family: var(--font-mono);
+          color: #0f172a;
         }
 
         .input-with-action {
@@ -511,23 +479,26 @@ export default function SettingsPage() {
           align-items: center;
         }
 
-        .key-input {
-          padding-right: 46px;
+        .form-input.key-input {
+          padding-right: 48px;
           font-family: var(--font-mono);
-          font-size: 0.9rem;
+          letter-spacing: 0.05em;
+          font-size: 0.92rem;
         }
 
         .btn-toggle-view {
           position: absolute;
           right: 12px;
-          background: transparent;
+          background: none;
           border: none;
           color: #64748b;
           cursor: pointer;
-          font-size: 1.05rem;
+          font-size: 1.1rem;
+          padding: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: color 0.15s ease;
         }
 
         .btn-toggle-view:hover {
@@ -538,87 +509,125 @@ export default function SettingsPage() {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 14px;
+          padding: 12px 16px;
           border-radius: 8px;
           font-size: 0.88rem;
           font-weight: 600;
-          margin-bottom: 20px;
+          margin-bottom: 22px;
         }
 
         .test-status-box.valid {
           background: #ecfdf5;
-          color: #059669;
+          color: #065f46;
           border: 1px solid #a7f3d0;
         }
 
         .test-status-box.invalid {
           background: #fef2f2;
-          color: #dc2626;
+          color: #991b1b;
           border: 1px solid #fecaca;
         }
 
-        .card-actions-row {
+        .action-buttons-bar {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          margin-top: auto;
-          padding-top: 16px;
-          border-top: 1px solid #f1f5f9;
+          justify-content: flex-end;
+          gap: 12px;
+          margin-top: 10px;
         }
 
-        .groq-help-link {
-          display: inline-flex;
+        /* Guide Card */
+        .settings-guide-card {
+          padding: 24px 28px;
+          border-radius: 14px;
+          border-left: 4px solid #7c3aed;
+        }
+
+        .guide-header {
+          display: flex;
           align-items: center;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+
+        .guide-icon {
+          color: #7c3aed;
+          font-size: 1.2rem;
+        }
+
+        .guide-title {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        .guide-text {
+          font-size: 0.88rem;
+          color: #475569;
+          margin-bottom: 10px;
+        }
+
+        .guide-list {
+          list-style: disc;
+          padding-left: 20px;
+          display: flex;
+          flex-direction: column;
           gap: 6px;
           font-size: 0.85rem;
-          font-weight: 600;
-          color: #6366f1;
+          color: #475569;
+          line-height: 1.5;
         }
 
-        .groq-help-link:hover {
-          color: #4f46e5;
+        .guide-list code {
+          background: #f1f5f9;
+          padding: 1px 4px;
+          border-radius: 4px;
+          font-family: var(--font-mono);
+          color: #0f172a;
+        }
+
+        .guide-footer {
+          margin-top: 18px;
+          padding-top: 14px;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .groq-external-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #7c3aed;
+          font-size: 0.88rem;
+          font-weight: 600;
+          text-decoration: none;
+          transition: color 0.15s ease;
+        }
+
+        .groq-external-link:hover {
+          color: #6d28d9;
           text-decoration: underline;
         }
 
-        /* Save Bar */
-        .settings-save-bar {
-          padding: 24px 32px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        .spin {
+          animation: spin 1s linear infinite;
         }
 
-        .save-bar-title {
-          font-size: 1.15rem;
-          font-weight: 700;
-          color: #0f172a;
-          margin-bottom: 4px;
-        }
-
-        .save-bar-desc {
-          font-size: 0.88rem;
-          color: #64748b;
-        }
-
-        .btn-save-all {
-          padding: 13px 28px;
-          font-size: 1rem;
-          white-space: nowrap;
-        }
-
-        @media (max-width: 900px) {
-          .settings-grid {
-            grid-template-columns: 1fr;
+        @keyframes spin {
+          100% {
+            transform: rotate(360deg);
           }
-          .settings-save-bar {
+        }
+
+        @media (max-width: 640px) {
+          .settings-card {
+            padding: 20px;
+          }
+
+          .action-buttons-bar {
             flex-direction: column;
-            text-align: center;
           }
-          .btn-save-all {
+
+          .action-buttons-bar .btn {
             width: 100%;
           }
         }

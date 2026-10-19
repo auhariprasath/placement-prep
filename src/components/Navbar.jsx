@@ -72,7 +72,7 @@ export default function Navbar() {
       items: [
         { href: "/forum", label: "Community Forum", icon: <FaComments /> },
         { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
-        { href: "/settings", label: "Settings & API Keys", icon: <FaKey /> },
+        { href: "/settings", label: "Groq API Settings", icon: <FaKey /> },
       ]
     }
   ];
