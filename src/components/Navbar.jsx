@@ -343,64 +343,69 @@ export default function Navbar() {
         }
 
         .nav-section-title {
-          font-size: 0.68rem;
-          font-weight: 700;
+          font-size: 0.72rem;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #64748b;
+          letter-spacing: 0.09em;
+          color: #c7d2fe !important;
           padding: 0 10px;
-          margin-bottom: 6px;
+          margin-bottom: 7px;
         }
 
         .nav-list {
           list-style: none;
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 4px;
         }
 
         .sidebar-nav-link {
           position: relative;
           display: flex;
           align-items: center;
-          gap: 11px;
-          padding: 9px 12px;
-          border-radius: 9px;
-          color: #94a3b8;
-          font-size: 0.88rem;
+          gap: 12px;
+          padding: 10px 14px;
+          border-radius: 10px;
+          color: #f1f5f9 !important;
+          font-size: 0.91rem;
           font-weight: 500;
           text-decoration: none;
-          transition: all 0.2s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .sidebar-nav-link:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.05);
+          color: #ffffff !important;
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateX(2px);
         }
 
         .sidebar-nav-link.active {
-          color: #ffffff;
-          background: rgba(99, 102, 241, 0.15);
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          font-weight: 600;
+          color: #ffffff !important;
+          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+          border: 1px solid rgba(196, 181, 253, 0.4);
+          font-weight: 700;
+          box-shadow: 0 4px 16px rgba(124, 58, 237, 0.45);
         }
 
         .nav-link-icon {
-          font-size: 1.05rem;
+          font-size: 1.1rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 20px;
-          color: #64748b;
-          transition: color 0.2s ease;
+          width: 22px;
+          color: #cbd5e1;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
         }
 
         .sidebar-nav-link:hover .nav-link-icon {
-          color: #a5b4fc;
+          color: #ffffff;
+          transform: scale(1.1);
         }
 
         .sidebar-nav-link.active .nav-link-icon {
-          color: #818cf8;
+          color: #ffffff !important;
+          filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
         }
 
         .nav-link-label {
@@ -408,13 +413,25 @@ export default function Navbar() {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          color: #f1f5f9 !important;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+
+        .sidebar-nav-link:hover .nav-link-label {
+          color: #ffffff !important;
+        }
+
+        .sidebar-nav-link.active .nav-link-label {
+          color: #ffffff !important;
+          font-weight: 700;
         }
 
         .nav-link-badge {
           font-size: 0.58rem;
           font-weight: 800;
           letter-spacing: 0.05em;
-          padding: 2px 6px;
+          padding: 2px 7px;
           border-radius: 999px;
         }
 
@@ -435,10 +452,10 @@ export default function Navbar() {
           left: 0;
           top: 6px;
           bottom: 6px;
-          width: 3px;
-          background: #818cf8;
-          border-radius: 0 3px 3px 0;
-          box-shadow: 0 0 10px #818cf8;
+          width: 4px;
+          background: #ffffff;
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 10px #ffffff;
         }
 
         /* Sidebar Footer */
@@ -496,8 +513,8 @@ export default function Navbar() {
         }
 
         .cta-sub {
-          color: #94a3b8;
-          font-size: 0.68rem;
+          color: #cbd5e1;
+          font-size: 0.72rem;
         }
 
         .cta-arrow {
@@ -527,14 +544,14 @@ export default function Navbar() {
         }
 
         .status-label {
-          font-size: 0.7rem;
-          color: #64748b;
+          font-size: 0.72rem;
+          color: #94a3b8;
           font-weight: 500;
         }
 
         .sidebar-copy {
-          font-size: 0.66rem;
-          color: #475569;
+          font-size: 0.68rem;
+          color: #64748b;
           text-align: center;
           margin-top: 2px;
         }
