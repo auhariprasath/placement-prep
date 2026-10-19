@@ -332,27 +332,27 @@ export default function BlogPage() {
         .modal-article-title {
           font-size: 1.8rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           line-height: 1.35;
           margin-bottom: 10px;
         }
 
         .modal-meta-line {
           font-size: 0.85rem;
-          color: var(--text-secondary);
+          color: #64748b;
           margin-bottom: 24px;
         }
 
         .article-body-content {
-          color: #e2e8f0;
+          color: #334155;
           font-size: 1rem;
           line-height: 1.8;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid #e2e8f0;
           padding-top: 20px;
         }
 
         .content-h3 {
-          color: #ffffff;
+          color: #0f172a;
           font-size: 1.25rem;
           font-weight: 700;
           margin: 20px 0 10px;
@@ -363,8 +363,10 @@ export default function BlogPage() {
         }
 
         .content-list-block {
-          background: rgba(255, 255, 255, 0.03);
-          border-left: 3px solid #818cf8;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-left: 4px solid #6366f1;
+          color: #334155;
           padding: 12px 18px;
           border-radius: 0 8px 8px 0;
           margin-bottom: 16px;

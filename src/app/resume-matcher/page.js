@@ -416,12 +416,12 @@ Requirements:
           display: block;
           font-size: 1.4rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .sub-label {
           font-size: 0.8rem;
-          color: var(--text-secondary);
+          color: #64748b;
         }
 
         .skills-breakdown-grid {
@@ -446,8 +446,8 @@ Requirements:
           gap: 8px;
         }
 
-        .text-green { color: #34d399; }
-        .text-red { color: #f87171; }
+        .text-green { color: #059669; }
+        .text-red { color: #dc2626; }
 
         .skills-pill-wrap {
           display: flex;
@@ -463,15 +463,15 @@ Requirements:
         }
 
         .chip-matched {
-          background: rgba(16, 185, 129, 0.15);
-          color: #6ee7b7;
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          background: #ecfdf5;
+          color: #065f46;
+          border: 1px solid #a7f3d0;
         }
 
         .chip-missing {
-          background: rgba(239, 68, 68, 0.15);
-          color: #fca5a5;
-          border: 1px solid rgba(239, 68, 68, 0.3);
+          background: #fef2f2;
+          color: #991b1b;
+          border: 1px solid #fecaca;
         }
 
         .bullet-rewrite-card {
@@ -481,7 +481,7 @@ Requirements:
         .section-heading {
           font-size: 1.3rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 20px;
           display: flex;
           align-items: center;
@@ -494,8 +494,8 @@ Requirements:
         }
 
         .rewrite-item {
-          background: rgba(13, 20, 36, 0.7);
-          border: 1px solid var(--border-light);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: var(--radius-sm);
           padding: 20px;
         }
@@ -507,8 +507,8 @@ Requirements:
         .tag-before {
           font-size: 0.7rem;
           font-weight: 700;
-          background: rgba(239, 68, 68, 0.2);
-          color: #fca5a5;
+          background: #fee2e2;
+          color: #b91c1c;
           padding: 2px 8px;
           border-radius: 4px;
           display: inline-block;
@@ -516,7 +516,7 @@ Requirements:
         }
 
         .rewrite-before p {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.9rem;
           text-decoration: line-through;
         }
@@ -524,8 +524,8 @@ Requirements:
         .tag-after {
           font-size: 0.7rem;
           font-weight: 700;
-          background: rgba(16, 185, 129, 0.2);
-          color: #34d399;
+          background: #ecfdf5;
+          color: #047857;
           padding: 2px 8px;
           border-radius: 4px;
           display: inline-block;
@@ -533,7 +533,7 @@ Requirements:
         }
 
         .rewrite-after p {
-          color: #ffffff;
+          color: #0f172a;
           font-size: 0.95rem;
           font-weight: 500;
           line-height: 1.5;
@@ -541,7 +541,7 @@ Requirements:
 
         .rewrite-reason {
           font-size: 0.85rem;
-          color: #a5b4fc;
+          color: #4f46e5;
           margin-top: 8px;
         }
 
@@ -560,11 +560,11 @@ Requirements:
           align-items: center;
           gap: 10px;
           font-size: 0.9rem;
-          color: #cbd5e1;
+          color: #334155;
         }
 
-        .icon-pass { color: #34d399; font-size: 1.1rem; }
-        .icon-fail { color: #f87171; font-size: 1.1rem; }
+        .icon-pass { color: #059669; font-size: 1.1rem; }
+        .icon-fail { color: #dc2626; font-size: 1.1rem; }
 
         @media (max-width: 768px) {
           .matcher-input-grid {

@@ -270,9 +270,9 @@ export default function DomainSelectionPage() {
         }
 
         .chip-btn {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light);
-          color: #cbd5e1;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          color: #334155;
           padding: 6px 12px;
           border-radius: var(--radius-full);
           font-size: 0.8rem;
@@ -282,9 +282,9 @@ export default function DomainSelectionPage() {
         }
 
         .chip-btn:hover {
-          background: rgba(99, 102, 241, 0.2);
-          border-color: rgba(99, 102, 241, 0.4);
-          color: #ffffff;
+          background: #e0e7ff;
+          border-color: #a5b4fc;
+          color: #4338ca;
         }
 
         .error-text {

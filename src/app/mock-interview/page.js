@@ -676,7 +676,7 @@ export default function MockInterviewPage() {
         .setup-heading {
           font-size: 1.75rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 8px;
         }
 
@@ -879,9 +879,9 @@ export default function MockInterviewPage() {
           width: 44px;
           height: 44px;
           border-radius: 10px;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid var(--border-light);
-          color: white;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          color: #1e293b;
           font-size: 1.1rem;
           cursor: pointer;
           display: flex;
@@ -891,12 +891,14 @@ export default function MockInterviewPage() {
         }
 
         .btn-media:hover {
-          background: rgba(255, 255, 255, 0.16);
+          background: #e2e8f0;
+          color: #0f172a;
         }
 
         .btn-media.active {
           background: var(--grad-primary);
           border-color: transparent;
+          color: #ffffff;
         }
 
         .btn-media.muted {

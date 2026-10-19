@@ -318,22 +318,22 @@ export default function ForumPage() {
           flex: 1;
           display: flex;
           align-items: center;
-          background: rgba(13, 20, 36, 0.7);
-          border: 1px solid var(--border-light);
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
           border-radius: var(--radius-sm);
-          padding: 6px 14px;
+          padding: 8px 14px;
           min-width: 240px;
         }
 
         .search-icon {
-          color: #818cf8;
+          color: #6366f1;
           margin-right: 10px;
         }
 
         .search-input {
           background: transparent;
           border: none;
-          color: white;
+          color: #0f172a;
           width: 100%;
           outline: none;
           font-size: 0.9rem;

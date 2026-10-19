@@ -342,7 +342,7 @@ int main() {
         .output-title {
           font-weight: 700;
           font-size: 1rem;
-          color: #ffffff;
+          color: #0f172a;
           display: flex;
           align-items: center;
         }

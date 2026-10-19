@@ -223,7 +223,7 @@ export default function HomePage() {
         <div className="container">
           <div className="deploy-banner card-glass">
             <div className="deploy-banner-content">
-              <span className="badge-tag" style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", borderColor: "rgba(16, 185, 129, 0.3)" }}>
+              <span className="badge-tag" style={{ background: "#ecfdf5", color: "#059669", borderColor: "#a7f3d0" }}>
                 <FaShieldAlt style={{ marginRight: "6px" }} /> Modern Serverless Architecture
               </span>
               <h2>Ready for Instant 1-Click Deployment on Vercel</h2>
@@ -452,20 +452,21 @@ export default function HomePage() {
 
         .deploy-banner {
           padding: 48px;
-          background: linear-gradient(135deg, rgba(22, 30, 53, 0.8) 0%, rgba(13, 20, 36, 0.9) 100%);
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.15);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: var(--radius-md);
+          box-shadow: var(--shadow-card);
         }
 
         .deploy-banner-content h2 {
           font-size: 2rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 14px;
         }
 
         .deploy-banner-content p {
-          color: var(--text-secondary);
+          color: #475569;
           font-size: 1rem;
           line-height: 1.7;
           max-width: 800px;
@@ -473,8 +474,8 @@ export default function HomePage() {
         }
 
         .deploy-banner-content code {
-          background: rgba(99, 102, 241, 0.2);
-          color: #c7d2fe;
+          background: #eef2ff;
+          color: #4338ca;
           padding: 2px 8px;
           border-radius: 4px;
           font-family: var(--font-mono);
