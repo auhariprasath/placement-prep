@@ -1,9 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaCompass, FaSearch, FaBriefcase, FaFileAlt, FaCalendarAlt, FaArrowRight, FaComments, FaRobot, FaCode, FaCheckCircle } from 'react-icons/fa';
+import { FaCompass, FaSearch, FaBriefcase, FaFileAlt, FaCalendarAlt, FaArrowRight, FaComments, FaRobot, FaCode, FaCheckCircle, FaMicrophone } from 'react-icons/fa';
 
 const Home = () => {
   const features = [
+    {
+      icon: <FaMicrophone />,
+      title: 'AI Mock Interview',
+      description: 'Upload resume, undergo real-time voice & mic interview with AI Assistant, and get deep evaluation reports.',
+      link: '/mock-interview',
+      color: '#ec4899'
+    },
     {
       icon: <FaCompass />,
       title: 'Domain Selection',
@@ -42,7 +49,7 @@ const Home = () => {
     {
       icon: <FaCalendarAlt />,
       title: 'Study Planner',
-      description: 'Get personalized study plans powered by Gemini AI based on your goals and timeline.',
+      description: 'Get personalized study plans powered by AI Assistant based on your goals and timeline.',
       link: '/study-planner',
       color: '#fa709a'
     },
@@ -76,7 +83,10 @@ const Home = () => {
           <h1>Your Complete Placement Preparation Platform</h1>
           <p>Discover your career path, find jobs, prepare for interviews, build resumes, practice coding, connect with the community, and get AI-powered guidance - all in one place.</p>
           <div className="hero-buttons">
-            <Link to="/domain-selection" className="hero-btn hero-btn-primary">
+            <Link to="/mock-interview" className="hero-btn hero-btn-primary" style={{ background: 'linear-gradient(135deg, #ec4899, #8b5cf6)', border: 'none' }}>
+              <FaMicrophone style={{ marginRight: '8px' }} /> AI Mock Interview
+            </Link>
+            <Link to="/domain-selection" className="hero-btn hero-btn-secondary">
               Get Started <FaArrowRight style={{ marginLeft: '8px' }} />
             </Link>
             <Link to="/ai-agent" className="hero-btn hero-btn-secondary">

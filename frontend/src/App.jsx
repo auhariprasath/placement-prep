@@ -13,6 +13,7 @@ import Blog from './pages/Blog';
 import ResumeMatcher from './pages/ResumeMatcher';
 import OnlineCompiler from './pages/OnlineCompiler';
 import AIAgent from './pages/AIAgent';
+import AIMockInterview from './pages/AIMockInterview';
 import './styles/App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/domain-selection" element={<DomainSelection />} />
+            <Route path="/mock-interview" element={<AIMockInterview />} />
             <Route path="/job-search" element={<JobSearch />} />
             <Route path="/interview-search" element={<InterviewSearch />} />
             <Route path="/resume-builder" element={<ResumeBuilder />} />

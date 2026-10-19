@@ -2,8 +2,6 @@ package com.placementprep.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.placementprep.dto.AgentInteractionRequest;
 import com.placementprep.dto.AgentInteractionResponse;
 import com.placementprep.model.AgentInteraction;
@@ -17,15 +15,14 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.*;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AgentService {
     
-    @Value("${gemini.api.key}")
-    private String geminiApiKey;
+    @Value("${groq.api.key}")
+    private String groqApiKey;
     
     @Autowired
     private AgentInteractionRepository agentInteractionRepository;
@@ -33,10 +30,14 @@ public class AgentService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     
-    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+    private static final String GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+    private static final String MODEL_NAME = "qwen/qwen3.8-27b";
     
     public AgentService() {
-        this.httpClient = HttpClient.newHttpClient();
+        this.httpClient = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(30))
+                .build();
         this.objectMapper = new ObjectMapper();
     }
     
@@ -47,30 +48,40 @@ public class AgentService {
             String context = buildContext(userId, sessionId, request.getContext());
             String prompt = buildPrompt(request.getMessage(), context, request.getInteractionType());
             
-            String geminiResponse = callGeminiAPI(prompt);
+            String aiResponse = callGroqAPI(prompt);
             
             AgentInteractionResponse response = new AgentInteractionResponse();
             
-            // Check for navigation intent [NAVIGATE: /path]
-            if (geminiResponse.contains("[NAVIGATE:")) {
-                int start = geminiResponse.indexOf("[NAVIGATE:");
-                int end = geminiResponse.indexOf("]", start);
+            // Check for navigation & state intent [NAVIGATE: /path] or [NAVIGATE: /path | DATA: {"subject":"DSA","durationDays":30}]
+            if (aiResponse.contains("[NAVIGATE:")) {
+                int start = aiResponse.indexOf("[NAVIGATE:");
+                int end = aiResponse.indexOf("]", start);
                 if (end > start) {
-                    String navPath = geminiResponse.substring(start + 11, end).trim();
-                    response.setRedirectPath(navPath);
-                    // Clean up the text response
-                    geminiResponse = geminiResponse.replace(geminiResponse.substring(start, end + 1), "").trim();
+                    String navContent = aiResponse.substring(start + 11, end).trim();
+                    if (navContent.contains("| DATA:")) {
+                        String[] parts = navContent.split("\\| DATA:");
+                        response.setRedirectPath(parts[0].trim());
+                        try {
+                            JsonNode jsonNode = objectMapper.readTree(parts[1].trim());
+                            response.setTargetState(jsonNode);
+                        } catch (Exception ex) {
+                            System.err.println("Failed to parse navigation DATA JSON: " + ex.getMessage());
+                        }
+                    } else {
+                        response.setRedirectPath(navContent);
+                    }
+                    aiResponse = aiResponse.replace(aiResponse.substring(start, end + 1), "").trim();
                 }
             }
             
-            response.setResponse(geminiResponse);
+            response.setResponse(aiResponse);
             response.setSessionId(sessionId);
             response.setContext(context);
             response.setVoiceMode(request.isVoiceMode());
             response.setSuggestedActions(generateSuggestedActions(request.getMessage(), request.getInteractionType()));
             
             if (request.isVoiceMode()) {
-                String voiceUrl = generateVoice(geminiResponse);
+                String voiceUrl = generateVoice(aiResponse);
                 response.setVoiceUrl(voiceUrl);
             }
             
@@ -98,12 +109,13 @@ public class AgentService {
     private String buildContext(Long userId, String sessionId, String additionalContext) {
         StringBuilder context = new StringBuilder();
         
-        context.append("domain selection advice, and general career guidance. ");
-        context.append("IMPORTANT: Always keep your responses extremely short, strictly 1 or 2 lines max.\n\n");
+        context.append("You are an intelligent Placement Prep AI Assistant that can answer questions AND execute actions for the user.\n");
+        context.append("IMPORTANT: Always keep your response conversational, concise (1 or 2 lines).\n\n");
         
-        context.append("Sitemap (Paths to pages):\n");
+        context.append("Sitemap & Automated Actions:\n");
         context.append("- Home: /\n");
         context.append("- Domain Selection: /domain-selection\n");
+        context.append("- AI Mock Interview: /mock-interview\n");
         context.append("- Job Search: /job-search\n");
         context.append("- Interview Search: /interview-search\n");
         context.append("- Resume Builder: /resume-builder\n");
@@ -113,8 +125,11 @@ public class AgentService {
         context.append("- Online Compiler: /compiler\n");
         context.append("- AI Assistant: /ai-agent\n\n");
         
-        context.append("If the user asks to go to or navigate to a page, always include '[NAVIGATE: /path]' in your response.\n");
-        context.append("Example: 'Sure, let's go to the Resume Builder. [NAVIGATE: /resume-builder]'\n\n");
+        context.append("ACTION COMMAND FORMAT:\n");
+        context.append("1. If user asks to navigate to a page without prefilled data, append: '[NAVIGATE: /path]'\n");
+        context.append("2. If user asks to perform an action on a page (e.g., create a study plan for DSA for 30 days, search for Java jobs, etc.), append '[NAVIGATE: /path | DATA: {\"subject\":\"DSA\",\"durationDays\":30,\"autoSubmit\":true}]'\n");
+        context.append("Example 1: 'Navigating to Study Planner to generate your 30-day DSA plan! [NAVIGATE: /study-planner | DATA: {\"subject\":\"Data Structures & Algorithms\",\"durationDays\":30,\"hoursPerDay\":4,\"difficultyLevel\":\"intermediate\",\"autoSubmit\":true}]'\n");
+        context.append("Example 2: 'Taking you to Job Search for Java Developer roles! [NAVIGATE: /job-search | DATA: {\"jobTitle\":\"Java Developer\",\"autoSubmit\":true}]'\n\n");
         
         if (additionalContext != null && !additionalContext.isEmpty()) {
             context.append("Additional Context: ").append(additionalContext).append("\n\n");
@@ -159,60 +174,52 @@ public class AgentService {
         return prompt.toString();
     }
     
-    private String callGeminiAPI(String prompt) throws Exception {
-        Map<String, Object> part = new HashMap<>();
-        part.put("text", prompt);
-        
-        Map<String, Object> content = new HashMap<>();
-        content.put("parts", Collections.singletonList(part));
+    private String callGroqAPI(String prompt) throws Exception {
+        Map<String, Object> userMsg = new HashMap<>();
+        userMsg.put("role", "user");
+        userMsg.put("content", prompt);
         
         Map<String, Object> requestBodyMap = new HashMap<>();
-        requestBodyMap.put("contents", Collections.singletonList(content));
+        requestBodyMap.put("model", MODEL_NAME);
+        requestBodyMap.put("messages", Collections.singletonList(userMsg));
+        requestBodyMap.put("temperature", 0.7);
         
         String requestJson = objectMapper.writeValueAsString(requestBodyMap);
-        String url = GEMINI_API_URL + "?key=" + geminiApiKey;
         
-        System.out.println("Calling Gemini API: " + url.substring(0, url.indexOf("?")));
+        System.out.println("Calling Groq API: " + GROQ_API_URL + " with model: " + MODEL_NAME);
         long startTime = System.currentTimeMillis();
         
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
+                .uri(URI.create(GROQ_API_URL))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .timeout(java.time.Duration.ofSeconds(60))
+                .header("Authorization", "Bearer " + groqApiKey)
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                .timeout(Duration.ofSeconds(60))
                 .POST(HttpRequest.BodyPublishers.ofString(requestJson))
                 .build();
-        
-        System.out.println("Request Body: " + requestJson);
         
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         
         long duration = System.currentTimeMillis() - startTime;
-        System.out.println("Gemini API call took: " + duration + "ms");
+        System.out.println("Groq API call took: " + duration + "ms");
         
         if (response.statusCode() == 200) {
             JsonNode root = objectMapper.readTree(response.body());
-            JsonNode candidates = root.path("candidates");
-            if (candidates.isArray() && candidates.size() > 0) {
-                JsonNode contentNode = candidates.get(0).path("content");
-                JsonNode partsNode = contentNode.path("parts");
-                if (partsNode.isArray() && partsNode.size() > 0) {
-                    return partsNode.get(0).path("text").asText();
-                }
+            JsonNode choices = root.path("choices");
+            if (choices.isArray() && choices.size() > 0) {
+                return choices.get(0).path("message").path("content").asText();
             }
-            throw new RuntimeException("Gemini returned 200 but no content was generated.");
+            throw new RuntimeException("Groq returned 200 but no choices were generated.");
         } else {
             String errorBody = response.body();
-            System.err.println("Gemini API Error (HTTP " + response.statusCode() + "): " + errorBody);
+            System.err.println("Groq API Error (HTTP " + response.statusCode() + "): " + errorBody);
             
             if (response.statusCode() == 429) {
                 return "I'm currently receiving too many requests. Please try again in 30 seconds.";
             }
-            if (response.statusCode() == 404) {
-                return "The AI model is currently unavailable. Please try again later.";
-            }
             
-            throw new RuntimeException("Gemini API Error: " + response.statusCode());
+            throw new RuntimeException("Groq API Error: " + response.statusCode() + " - " + errorBody);
         }
     }
     

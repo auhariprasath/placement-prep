@@ -1,208 +1,288 @@
 import React, { useState } from 'react';
-import { FaCompass, FaCheckCircle, FaTheaterMasks, FaMicrochip, FaBook, FaRunning, FaLanguage, FaFlask } from 'react-icons/fa';
+import { 
+  FaCompass, FaRobot, FaLightbulb, FaBookOpen, 
+  FaYoutube, FaSpinner, FaArrowRight, FaRedo, 
+  FaGraduationCap, FaCheckCircle, FaPlay 
+} from 'react-icons/fa';
 import apiService from '../services/apiService';
+import '../styles/DomainSelection.css';
 
 const DomainSelection = () => {
-  const featureList = [
-    'Drawing', 'Dancing', 'Singing', 'Sports', 'Video Game', 'Acting', 'Travelling',
-    'Gardening', 'Animals', 'Photography', 'Teaching', 'Exercise', 'Coding',
-    'Electricity Components', 'Mechanic Parts', 'Computer Parts', 'Researching',
-    'Architecture', 'Historic Collection', 'Botany', 'Zoology', 'Physics',
-    'Accounting', 'Economics', 'Sociology', 'Geography', 'Psycology', 'History',
-    'Science', 'Bussiness Education', 'Chemistry', 'Mathematics', 'Biology',
-    'Makeup', 'Designing', 'Content writing', 'Crafting', 'Literature', 'Reading',
-    'Cartooning', 'Debating', 'Asrtology', 'Hindi', 'French', 'English', 'Urdu',
-    'Other Language', 'Solving Puzzles', 'Gymnastics', 'Yoga', 'Engeeniering',
-    'Doctor', 'Pharmisist', 'Cycling', 'Knitting', 'Director', 'Journalism',
-    'Bussiness', 'Listening Music'
-  ];
-
-  const categories = [
-    {
-      name: 'Arts & Creative',
-      icon: <FaTheaterMasks />,
-      features: ['Drawing', 'Dancing', 'Singing', 'Acting', 'Photography', 'Makeup', 'Designing', 'Content writing', 'Crafting', 'Cartooning', 'Listening Music', 'Knitting', 'Literature']
-    },
-    {
-      name: 'Technical & Science',
-      icon: <FaMicrochip />,
-      features: ['Coding', 'Electricity Components', 'Mechanic Parts', 'Computer Parts', 'Researching', 'Physics', 'Chemistry', 'Science', 'Mathematics', 'Engineering']
-    },
-    {
-      name: 'Humanities & Social',
-      icon: <FaBook />,
-      features: ['Sociology', 'Geography', 'Psycology', 'History', 'Accounting', 'Economics', 'Bussiness Education', 'Bussiness', 'Journalism']
-    },
-    {
-      name: 'Life Science',
-      icon: <FaFlask />,
-      features: ['Botany', 'Zoology', 'Biology', 'Doctor', 'Pharmisist', 'Animals', 'Gardening']
-    },
-    {
-      name: 'Lifestyle & Hobbies',
-      icon: <FaRunning />,
-      features: ['Sports', 'Video Game', 'Travelling', 'Teaching', 'Exercise', 'Gymnastics', 'Yoga', 'Cycling', 'Solving Puzzles', 'Reading']
-    },
-    {
-      name: 'Languages & Others',
-      icon: <FaLanguage />,
-      features: ['Hindi', 'French', 'English', 'Urdu', 'Other Language', 'Debating', 'Asrtology', 'Director', 'Architecture', 'Historic Collection']
-    }
-  ];
-
-  // Initialize all features as false
-  const initialFeatures = {};
-  featureList.forEach(f => initialFeatures[f] = false);
-
-  const [features, setFeatures] = useState(initialFeatures);
-  const [result, setResult] = useState(null);
+  const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
 
-  const handleCheckboxChange = (f) => {
-    setFeatures(prev => ({
-      ...prev,
-      [f]: !prev[f]
-    }));
-  };
+  const examplePrompts = [
+    "I have a strong interest in writing programs, solving logical algorithms, and building software applications.",
+    "I love working with data analysis, machine learning models, neural networks, and Python statistical libraries.",
+    "I am fascinated by circuits, microcontrollers, embedded systems, and robotics hardware.",
+    "I enjoy 3D mechanical CAD designing, thermodynamics, automobile engines, and manufacturing systems.",
+    "I am passionate about network security, ethical hacking, cryptography, and defending digital systems."
+  ];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePredict = async (e) => {
+    if (e) e.preventDefault();
+    if (!userInput.trim()) {
+      setError('Please type a short description of your interests, goals, or hobbies.');
+      return;
+    }
+
     setLoading(true);
-    setError(null);
+    setError('');
 
     try {
-      const response = await apiService.predictDomain({ features });
+      const response = await apiService.predictDomain({ userInput: userInput.trim() });
       setResult(response.data);
     } catch (err) {
-      setError('Failed to get career recommendation. Please try again.');
+      console.error('Failed to predict domain:', err);
+      setError('Failed to analyze domain using AI. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleExampleClick = (promptText) => {
+    setUserInput(promptText);
+    setError('');
+  };
+
+  const resetSelection = () => {
+    setResult(null);
+    setUserInput('');
+    setError('');
+  };
+
+  // Helper to extract YouTube video ID if standard link
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  };
+
+  // Fallback subjects if backend returns empty or legacy structure
+  const defaultFallbackSubjects = [
+    {
+      subjectName: "Data Structures & Algorithms",
+      description: "Core foundation for writing efficient code and clearing coding placement rounds.",
+      keyTopics: "Arrays, Linked Lists, Trees, Graphs, Sorting, Dynamic Programming",
+      videoTitle: "Data Structures and Algorithms for Beginners",
+      videoUrl: "https://www.youtube.com/watch?v=8hly31xKLI0",
+      videoChannel: "freeCodeCamp.org"
+    },
+    {
+      subjectName: "Database Management Systems (DBMS)",
+      description: "Teaches data storage, SQL queries, normalization, and relational databases.",
+      keyTopics: "Relational Algebra, SQL, Normalization, Indexing, ACID Properties",
+      videoTitle: "Database Management System Full Course",
+      videoUrl: "https://www.youtube.com/watch?v=dl00fOOYLOM",
+      videoChannel: "Gate Smashers"
+    },
+    {
+      subjectName: "Operating Systems",
+      description: "Covers process management, memory allocation, multi-threading, and file systems.",
+      keyTopics: "Process Scheduling, Deadlocks, Virtual Memory, Paging, System Calls",
+      videoTitle: "Operating System Complete Course",
+      videoUrl: "https://www.youtube.com/watch?v=bkWHS474qHw",
+      videoChannel: "Gate Smashers"
+    },
+    {
+      subjectName: "Computer Networks",
+      description: "Explores OSI layers, TCP/IP protocols, routing algorithms, and network security.",
+      keyTopics: "OSI Model, TCP/IP, IP Addressing, HTTP/HTTPS, Routing Protocols",
+      videoTitle: "Computer Networks Full Course",
+      videoUrl: "https://www.youtube.com/watch?v=IPvYjXCsTg8",
+      videoChannel: "freeCodeCamp.org"
+    }
+  ];
+
+  const getRecommendedDomainTitle = () => {
+    if (!result) return "";
+    let domain = result.recommendedDomain || result.domain || result.domainName || "B.Tech in Computer Science and Engineering";
+    if (!domain.startsWith("B.E.") && !domain.startsWith("B.Tech")) {
+      domain = "B.Tech in " + domain.replace(/^(BA|B\.A\.|BSc|B\.Sc\.|BCom|B\.Com\.|Bachelor of Arts in|Bachelor of Science in)\s*/i, "");
+    }
+    return domain;
+  };
+
+  const getSubjectsList = () => {
+    if (!result) return [];
+    if (result.importantSubjects && Array.isArray(result.importantSubjects) && result.importantSubjects.length > 0) {
+      return result.importantSubjects;
+    }
+    if (result.subjects && Array.isArray(result.subjects) && result.subjects.length > 0) {
+      return result.subjects;
+    }
+    return defaultFallbackSubjects;
+  };
+
   return (
-    <div className="domain-selection">
-      <div className="page-header">
-        <div className="container">
-          <h1><FaCompass style={{ marginRight: '12px' }} /> Career Path Finder</h1>
-          <p>Select your interests and skills to find your ideal professional path powered by our AI model</p>
+    <div className="domain-selection-page">
+      {/* Header Banner */}
+      <div className="domain-header">
+        <div className="header-badge">
+          <FaRobot /> AI Career Counselor
         </div>
+        <h1>B.E. / B.Tech Domain & Exam Subject Guide</h1>
+        <p>Describe your interests, hobbies, or coding passion in plain words. AI Assistant will analyze your statement, recommend your ideal B.E. / B.Tech Engineering branch, and list 4 essential exam subjects with demo videos.</p>
       </div>
 
-      <div className="page-content">
-        {!result ? (
-          <div className="card">
-            <h2 style={{ marginBottom: '24px', color: '#1a202c', textAlign: 'center' }}>Tell us about yourself</h2>
+      {!result ? (
+        /* INPUT CARD SECTION */
+        <div className="domain-input-card card-glass">
+          <form onSubmit={handlePredict}>
+            <div className="form-group">
+              <label htmlFor="user-interest-input">
+                <FaCompass className="input-icon" /> Describe Your Interests & Technical Goals:
+              </label>
+              <textarea
+                id="user-interest-input"
+                value={userInput}
+                onChange={(e) => {
+                  setUserInput(e.target.value);
+                  if (error) setError('');
+                }}
+                placeholder="e.g., I have a strong interest in writing programs, solving algorithmic puzzles, and building software applications..."
+                rows={5}
+                className="interest-textarea"
+              />
+            </div>
 
-            {error && <div className="error-message">{error}</div>}
-
-            <form onSubmit={handleSubmit}>
-              <div className="categories-grid">
-                {categories.map((cat, idx) => (
-                  <div key={idx} className="category-section" style={{ marginBottom: '32px' }}>
-                    <h3 style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      color: '#667eea',
-                      marginBottom: '16px',
-                      borderBottom: '2px solid #f1f5f9',
-                      paddingBottom: '8px'
-                    }}>
-                      {cat.icon} {cat.name}
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-                      {cat.features.map((f) => (
-                        <div
-                          key={f}
-                          className={`feature-item ${features[f] ? 'active' : ''}`}
-                          onClick={() => handleCheckboxChange(f)}
-                          style={{
-                            padding: '10px 15px',
-                            background: features[f] ? '#eff6ff' : '#f8fafc',
-                            border: `1px solid ${features[f] ? '#60a5fa' : '#e2e8f0'}`,
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            transition: 'all 0.2s'
-                          }}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={features[f]}
-                            onChange={() => { }} // Controlled by div click
-                            style={{ margin: 0 }}
-                          />
-                          <span style={{ fontSize: '14px', color: features[f] ? '#1e40af' : '#475569' }}>{f}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+            {/* Example Prompt Pills */}
+            <div className="example-prompts">
+              <span className="prompts-label"><FaLightbulb /> Or click an example prompt:</span>
+              <div className="pills-wrapper">
+                {examplePrompts.map((prompt, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className="prompt-pill"
+                    onClick={() => handleExampleClick(prompt)}
+                  >
+                    "{prompt.substring(0, 65)}..."
+                  </button>
                 ))}
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={loading}
-                style={{ width: '100%', padding: '20px', fontSize: '18px', marginTop: '20px' }}
-              >
-                {loading ? (
-                  <span className="spinner" style={{ width: '24px', height: '24px', borderWidth: '3px' }}></span>
-                ) : (
-                  'Predict Ideal Career Path'
-                )}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="domain-result" style={{ textAlign: 'center' }}>
-            <FaCheckCircle style={{ fontSize: '64px', color: '#10b981', marginBottom: '20px' }} />
-            <h3>Your Recommended Career Path</h3>
-            <div className="confidence-score" style={{
-              fontSize: '48px',
-              fontWeight: 800,
-              color: '#3b82f6',
-              margin: '10px 0'
-            }}>{result.confidenceScore}%</div>
-            <p style={{ color: '#64748b', marginBottom: '24px' }}>Match Confidence</p>
-
-            <h2 style={{
-              color: '#1e293b',
-              fontSize: '32px',
-              marginBottom: '32px',
-              padding: '20px',
-              background: '#f1f5f9',
-              borderRadius: '12px',
-              display: 'inline-block'
-            }}>{result.recommendedDomain}</h2>
-
-            <div className="domain-details" style={{ textAlign: 'left', maxWidth: '800px', margin: '0 auto' }}>
-              <div className="card">
-                <h4 style={{ color: '#334155', borderLeft: '4px solid #3b82f6', paddingLeft: '12px' }}>Detailed Insights</h4>
-                <p style={{ lineHeight: 1.6, color: '#475569' }}>{result.description}</p>
-
-                <h4 style={{ color: '#334155', borderLeft: '4px solid #3b82f6', paddingLeft: '12px', marginTop: '20px' }}>Top Career Opportunities</h4>
-                <p style={{ lineHeight: 1.6, color: '#475569' }}>{result.careerPaths}</p>
-
-                <h4 style={{ color: '#334155', borderLeft: '4px solid #3b82f6', paddingLeft: '12px', marginTop: '20px' }}>Actionable Skills to Build</h4>
-                <p style={{ lineHeight: 1.6, color: '#475569' }}>{result.skillsRequired}</p>
               </div>
             </div>
 
-            <button
-              onClick={() => setResult(null)}
-              className="btn btn-secondary"
-              style={{ marginTop: '40px', padding: '12px 32px' }}
-            >
-              Analyze Another Profile
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="btn-primary btn-large" disabled={loading}>
+              {loading ? (
+                <>
+                  <FaSpinner className="icon-spin" /> Analyzing B.E. / B.Tech Fit with AI Assistant...
+                </>
+              ) : (
+                <>
+                  Recommend Engineering Branch & Demo Videos <FaArrowRight />
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+      ) : (
+        /* RESULTS DASHBOARD SECTION */
+        <div className="domain-result-container">
+          {/* Main Domain Recommendation Card */}
+          <div className="recommendation-banner banner-glass">
+            <div className="banner-top">
+              <div className="domain-icon-circle">
+                <FaGraduationCap />
+              </div>
+              <div className="domain-title-group">
+                <div className="fit-badge">Recommended B.E. / B.Tech Branch ({Math.round(result.confidenceScore || 95)}% Match)</div>
+                <h2>{getRecommendedDomainTitle()}</h2>
+              </div>
+            </div>
+
+            <div className="domain-details-body">
+              <div className="fit-reason-box">
+                <h4><FaCheckCircle className="check-icon" /> Why This Branch Fits You:</h4>
+                <p>{result.fitReason || result.reason || "This engineering branch matches your expressed technical interests and career aspirations."}</p>
+              </div>
+              <div className="domain-overview-box">
+                <h4><FaLightbulb className="light-icon" /> Engineering Branch Overview:</h4>
+                <p>{result.description || result.overview || "Focuses on fundamental engineering principles, practical system development, and modern technologies."}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Important Subjects & Demo Videos */}
+          <div className="subjects-section">
+            <div className="section-title-box">
+              <h3><FaBookOpen /> 4 Core Semester Subjects & Demo Videos</h3>
+              <p>Essential subjects to master for your engineering university exams and placement interviews:</p>
+            </div>
+
+            <div className="subjects-grid">
+              {getSubjectsList().map((sub, idx) => {
+                const embedUrl = getEmbedUrl(sub.videoUrl);
+                const searchLink = (sub.videoUrl && sub.videoUrl.includes && sub.videoUrl.includes("youtube"))
+                  ? sub.videoUrl
+                  : `https://www.youtube.com/results?search_query=${encodeURIComponent((sub.subjectName || sub.title || "Engineering Subject") + ' full course tutorial')}`;
+
+                return (
+                  <div key={idx} className="subject-card card-glass">
+                    <div className="subject-card-header">
+                      <span className="subject-num">0{idx + 1}</span>
+                      <h4>{sub.subjectName || sub.name || sub.title || `Subject ${idx + 1}`}</h4>
+                    </div>
+
+                    <p className="subject-desc">{sub.description || sub.details || "Core semester subject essential for university examinations and placement technical rounds."}</p>
+
+                    {(sub.keyTopics || sub.topics) && (
+                      <div className="key-topics-box">
+                        <strong>Key Topics:</strong>
+                        <p>{sub.keyTopics || sub.topics}</p>
+                      </div>
+                    )}
+
+                    {/* Demo Video Recommendation */}
+                    <div className="video-recommendation-box">
+                      <div className="video-header">
+                        <FaYoutube className="yt-icon" />
+                        <span className="yt-channel">{sub.videoChannel || "YouTube Tutorial"}</span>
+                      </div>
+                      <h5 className="video-title">{sub.videoTitle || `${sub.subjectName || "Subject"} Full Course`}</h5>
+                      
+                      {embedUrl ? (
+                        <div className="video-embed-container">
+                          <iframe
+                            src={embedUrl}
+                            title={sub.videoTitle || sub.subjectName}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </div>
+                      ) : null}
+
+                      <a 
+                        href={searchLink}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="watch-video-btn"
+                        style={{ marginTop: embedUrl ? '10px' : '0' }}
+                      >
+                        <FaPlay /> Watch Demo Video on YouTube
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="result-actions">
+            <button onClick={resetSelection} className="btn-secondary btn-large">
+              <FaRedo /> Test Another Engineering Interest
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

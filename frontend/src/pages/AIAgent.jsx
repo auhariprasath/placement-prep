@@ -54,7 +54,7 @@ const AIAgent = () => {
 
       if (response.data.redirectPath) {
         setTimeout(() => {
-          navigate(response.data.redirectPath);
+          navigate(response.data.redirectPath, { state: response.data.targetState });
         }, 1500);
       }
     } catch (err) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaBriefcase, FaSearch, FaFileAlt, FaCalendarAlt, FaCompass, FaComments, FaRobot, FaCode, FaCheckCircle, FaHome } from 'react-icons/fa';
+import { FaBriefcase, FaSearch, FaFileAlt, FaCalendarAlt, FaCompass, FaComments, FaRobot, FaCode, FaCheckCircle, FaHome, FaMicrophone } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,6 +9,7 @@ const Navbar = () => {
   const navItems = [
     { path: '/', label: 'Home', icon: <FaHome /> },
     { path: '/domain-selection', label: 'Domain Selection', icon: <FaCompass /> },
+    { path: '/mock-interview', label: 'AI Mock Interview', icon: <FaMicrophone /> },
     { path: '/job-search', label: 'Job Search', icon: <FaSearch /> },
     { path: '/interview-search', label: 'Interviews', icon: <FaBriefcase /> },
     { path: '/resume-builder', label: 'Resume Builder', icon: <FaFileAlt /> },

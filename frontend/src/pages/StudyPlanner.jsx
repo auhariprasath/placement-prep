@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { FaCalendarAlt, FaClock, FaBook, FaLightbulb, FaCheckCircle } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { FaCalendarAlt, FaClock, FaBook, FaLightbulb, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import apiService from '../services/apiService';
 
 const StudyPlanner = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     subject: '',
     durationDays: 30,
@@ -14,6 +16,38 @@ const StudyPlanner = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Read location state passed from AI Assistant
+  useEffect(() => {
+    if (location.state) {
+      const incomingState = location.state;
+      const updatedForm = {
+        subject: incomingState.subject || '',
+        durationDays: incomingState.durationDays || 30,
+        hoursPerDay: incomingState.hoursPerDay || 4,
+        difficultyLevel: incomingState.difficultyLevel || 'intermediate',
+        targetGoal: incomingState.targetGoal || ''
+      };
+      setFormData(updatedForm);
+
+      if (incomingState.autoSubmit && incomingState.subject) {
+        autoGeneratePlan(updatedForm);
+      }
+    }
+  }, [location.state]);
+
+  const autoGeneratePlan = async (payload) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await apiService.generateStudyPlan(payload);
+      setResult(response.data);
+    } catch (err) {
+      setError('Failed to generate study plan. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +92,7 @@ const StudyPlanner = () => {
       <div className="page-header">
         <div className="container">
           <h1><FaCalendarAlt style={{ marginRight: '12px' }} /> Study Planner</h1>
-          <p>Get a personalized study plan powered by Gemini AI</p>
+          <p>Get a personalized study plan powered by AI Assistant</p>
         </div>
       </div>
 

@@ -131,6 +131,19 @@ const apiService = {
     return apiClient.get(`/agent/history?userId=${userId}&sessionId=${sessionId}`);
   },
 
+  // AI Mock Interview
+  startMockInterview: (formData) => {
+    return apiClient.post('/mock-interview/start', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  },
+
+  evaluateMockInterview: (data) => {
+    return apiClient.post('/mock-interview/evaluate', data);
+  },
+
   // Health Check
   healthCheck: () => {
     return apiClient.get('/health');

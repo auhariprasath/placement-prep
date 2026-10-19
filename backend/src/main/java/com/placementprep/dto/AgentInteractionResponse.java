@@ -15,4 +15,5 @@ public class AgentInteractionResponse {
     private boolean voiceMode;
     private String suggestedActions;
     private String redirectPath;
+    private Object targetState;
 }
