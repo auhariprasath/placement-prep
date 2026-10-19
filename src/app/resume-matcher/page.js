@@ -17,6 +17,7 @@ export default function ResumeMatcherPage() {
   const [jobDescription, setJobDescription] = useState("");
   const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [parsing, setParsing] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
@@ -28,21 +29,62 @@ Requirements:
 - Familiarity with Git version control, Docker containers, and CI/CD pipelines.
 - Bachelor's degree in Computer Science, IT, or related engineering discipline.`;
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFileName(file.name);
+    setError(null);
+
+    // If it's a plain text file, we can read directly
+    if (file.type === "text/plain" || file.name.endsWith(".txt")) {
       const reader = new FileReader();
       reader.onload = (event) => {
         setResumeText(event.target.result);
       };
       reader.readAsText(file);
+      return;
+    }
+
+    // For PDF, DOCX, or binary files, extract clean text via server-side parser
+    setParsing(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/resume/parse", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success && data.text) {
+        setResumeText(data.text);
+      } else {
+        throw new Error(data.error || "Failed to parse resume file");
+      }
+    } catch (err) {
+      console.error("Resume file extraction failed:", err);
+      setError(
+        err.message ||
+          "Could not extract text from this file. Please ensure it is a valid PDF or Word document, or paste the text directly."
+      );
+    } finally {
+      setParsing(false);
     }
   };
 
   const handleAnalyze = async () => {
-    if (!resumeText.trim()) {
+    const trimmed = resumeText.trim();
+    if (!trimmed) {
       setError("Please paste your resume content or upload a resume file.");
+      return;
+    }
+
+    if (trimmed.startsWith("%PDF-")) {
+      setError(
+        "It looks like raw unparsed PDF binary data was pasted. Please upload your .pdf resume file using the upload button so it can be extracted into clean text."
+      );
       return;
     }
 
@@ -91,11 +133,20 @@ Requirements:
               style={{ display: "none" }}
             />
             <label htmlFor="resume-ats-file" className="upload-label">
-              <FaUpload className="upload-icon" />
-              {fileName ? (
-                <span className="file-name"><FaFileAlt /> {fileName}</span>
+              {parsing ? (
+                <>
+                  <FaSpinner className="spin upload-icon" />
+                  <span>Extracting clean text from {fileName}...</span>
+                </>
               ) : (
-                <span>Upload resume (.pdf, .txt) or drag & drop</span>
+                <>
+                  <FaUpload className="upload-icon" />
+                  {fileName ? (
+                    <span className="file-name"><FaFileAlt /> {fileName} (Parsed)</span>
+                  ) : (
+                    <span>Upload resume (.pdf, .docx, .txt) or drag & drop</span>
+                  )}
+                </>
               )}
             </label>
           </div>

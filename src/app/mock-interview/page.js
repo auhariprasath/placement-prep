@@ -30,6 +30,7 @@ export default function MockInterviewPage() {
   const [resumeText, setResumeText] = useState("");
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [parsingResume, setParsingResume] = useState(false);
   const [error, setError] = useState(null);
 
   // Active Interview Session State
@@ -145,25 +146,65 @@ export default function MockInterviewPage() {
     }
   };
 
-  // Handle File Upload
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setUploadedFileName(file.name);
+  // Handle File Upload with robust PDF/DOCX parsing
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadedFileName(file.name);
+    setError(null);
+
+    // If it's a plain text file, we can read directly
+    if (file.type === "text/plain" || file.name.endsWith(".txt")) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        const text = event.target.result;
-        setResumeText(text);
+        setResumeText(event.target.result);
       };
       reader.readAsText(file);
+      return;
+    }
+
+    // For PDF, DOCX, or binary files, extract clean text via server-side parser
+    setParsingResume(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/resume/parse", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success && data.text) {
+        setResumeText(data.text);
+      } else {
+        throw new Error(data.error || "Failed to parse resume file");
+      }
+    } catch (err) {
+      console.error("Resume file extraction failed:", err);
+      setError(
+        err.message ||
+          "Could not extract text from this file. Please ensure it is a valid PDF or Word document, or paste the text directly."
+      );
+    } finally {
+      setParsingResume(false);
     }
   };
 
   // Start Interview
   const handleStartInterview = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if (resumeText.trim().startsWith("%PDF-")) {
+      setError(
+        "It looks like raw unparsed PDF binary data was submitted. Please upload your .pdf file using the upload button so it can be extracted into clean text."
+      );
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch("/api/mock-interview/start", {
@@ -324,11 +365,20 @@ export default function MockInterviewPage() {
                   style={{ display: "none" }}
                 />
                 <label htmlFor="resume-file" className="upload-label">
-                  <FaUpload className="upload-icon" />
-                  {uploadedFileName ? (
-                    <span className="file-name"><FaFileAlt /> {uploadedFileName}</span>
+                  {parsingResume ? (
+                    <>
+                      <FaSpinner className="spin upload-icon" />
+                      <span>Extracting clean text from {uploadedFileName}...</span>
+                    </>
                   ) : (
-                    <span>Click to upload resume (.pdf, .txt) or drag & drop</span>
+                    <>
+                      <FaUpload className="upload-icon" />
+                      {uploadedFileName ? (
+                        <span className="file-name"><FaFileAlt /> {uploadedFileName} (Parsed)</span>
+                      ) : (
+                        <span>Click to upload resume (.pdf, .docx, .txt) or drag & drop</span>
+                      )}
+                    </>
                   )}
                 </label>
               </div>

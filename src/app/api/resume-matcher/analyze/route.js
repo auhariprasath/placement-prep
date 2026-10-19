@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { callGroq, extractJSON } from "@/lib/groq";
+import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import mammoth from "mammoth";
 
 export async function POST(req) {
   try {
@@ -15,13 +17,24 @@ export async function POST(req) {
       const file = formData.get("file");
       if (file && typeof file === "object" && file.name) {
         try {
-          const text = await file.text();
-          const cleanText = text.replace(/[^\x20-\x7E\n]/g, " ").replace(/\s+/g, " ");
-          if (cleanText.length > 50) {
-            resumeText = (resumeText ? resumeText + "\n" : "") + cleanText.slice(0, 4000);
+          const fileExt = file.name.split(".").pop().toLowerCase();
+          const buffer = Buffer.from(await file.arrayBuffer());
+
+          if (fileExt === "pdf" || file.type === "application/pdf") {
+            const pdfData = await pdfParse(buffer);
+            if (pdfData.text) resumeText = pdfData.text.trim();
+          } else if (
+            fileExt === "docx" ||
+            file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ) {
+            const docxResult = await mammoth.extractRawText({ buffer });
+            if (docxResult.value) resumeText = docxResult.value.trim();
+          } else {
+            const text = buffer.toString("utf-8");
+            resumeText = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
           }
         } catch (e) {
-          console.warn("Could not parse uploaded resume file:", e);
+          console.warn("Could not parse uploaded resume file in analyze route:", e);
         }
       }
     } else {
@@ -30,8 +43,19 @@ export async function POST(req) {
       jobDescription = body.jobDescription || "";
     }
 
-    if (!resumeText.trim()) {
+    const trimmedResume = resumeText.trim();
+    if (!trimmedResume) {
       return NextResponse.json({ error: "Resume text or document is required" }, { status: 400 });
+    }
+
+    if (trimmedResume.startsWith("%PDF-")) {
+      return NextResponse.json(
+        {
+          error:
+            "The submitted resume appears to be raw unparsed PDF binary data (%PDF-1.x). Please upload your .pdf file again so it can be extracted into clean text.",
+        },
+        { status: 400 }
+      );
     }
 
     const systemPrompt = `You are a Principal Technical Recruiter and ATS (Applicant Tracking System) Algorithm Auditor.

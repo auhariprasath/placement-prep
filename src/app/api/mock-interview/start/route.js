@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { callGroq, extractJSON } from "@/lib/groq";
+import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import mammoth from "mammoth";
 
 export async function POST(req) {
   try {
@@ -17,14 +19,24 @@ export async function POST(req) {
       const file = formData.get("file");
       if (file && typeof file === "object" && file.name) {
         try {
-          const text = await file.text();
-          // Keep ASCII printable text for basic PDF/Text stream
-          const cleanText = text.replace(/[^\x20-\x7E\n]/g, " ").replace(/\s+/g, " ");
-          if (cleanText.length > 50) {
-            resumeText = (resumeText ? resumeText + "\n" : "") + cleanText.slice(0, 4000);
+          const fileExt = file.name.split(".").pop().toLowerCase();
+          const buffer = Buffer.from(await file.arrayBuffer());
+
+          if (fileExt === "pdf" || file.type === "application/pdf") {
+            const pdfData = await pdfParse(buffer);
+            if (pdfData.text) resumeText = pdfData.text.trim();
+          } else if (
+            fileExt === "docx" ||
+            file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ) {
+            const docxResult = await mammoth.extractRawText({ buffer });
+            if (docxResult.value) resumeText = docxResult.value.trim();
+          } else {
+            const text = buffer.toString("utf-8");
+            resumeText = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
           }
         } catch (e) {
-          console.warn("Could not read uploaded file as text:", e);
+          console.warn("Could not parse uploaded file in mock interview start:", e);
         }
       }
     } else {
@@ -32,6 +44,11 @@ export async function POST(req) {
       role = body.role || role;
       difficulty = body.difficulty || difficulty;
       resumeText = body.resumeText || "";
+    }
+
+    // Guard against raw unparsed PDF binary strings
+    if (resumeText.trim().startsWith("%PDF-")) {
+      resumeText = "";
     }
 
     const systemPrompt = `You are an elite Tech Hiring Manager conducting a realistic technical and behavioral placement interview.
