@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callGroq, extractJSON } from "@/lib/groq";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -108,6 +109,22 @@ Generate the comprehensive study plan now.`;
           { phase: "Week 3+", goal: "Complete Dynamic Programming and timed mock tests." }
         ]
       };
+    }
+
+    // Persist to Supabase if configured
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from("study_plans").insert({
+          subject,
+          duration_days: durationDays,
+          hours_per_day: hoursPerDay,
+          target_goal: targetGoal,
+          difficulty: difficultyLevel,
+          plan_data: plan,
+        });
+      } catch (dbErr) {
+        console.warn("Could not save study plan to Supabase:", dbErr.message);
+      }
     }
 
     return NextResponse.json(plan);

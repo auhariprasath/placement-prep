@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callGroq, extractJSON } from "@/lib/groq";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -110,6 +111,25 @@ Please evaluate the technical accuracy, depth, articulation, and problem solving
           "Do 1 full mock interview session per week before your placement week"
         ]
       };
+    }
+
+    // Persist to Supabase if configured
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from("mock_interviews").insert({
+          id: "intv-" + Date.now(),
+          role,
+          difficulty,
+          overall_score: evaluation.overallScore,
+          technical_score: evaluation.technicalScore,
+          communication_score: evaluation.communicationScore,
+          confidence_score: evaluation.confidenceScore,
+          hiring_decision: evaluation.hiringDecision,
+          evaluation,
+        });
+      } catch (dbErr) {
+        console.warn("Could not save interview to Supabase:", dbErr.message);
+      }
     }
 
     return NextResponse.json(evaluation);
