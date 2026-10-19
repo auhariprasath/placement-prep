@@ -18,8 +18,7 @@ import {
   FaTimes,
   FaGraduationCap,
   FaCheckCircle,
-  FaKey,
-  FaCog
+  FaKey
 } from "react-icons/fa";
 
 export default function Navbar() {
@@ -41,40 +40,21 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const navSections = [
-    {
-      title: "Preparation",
-      items: [
-        { href: "/", label: "Home", icon: <FaHome /> },
-        {
-          href: "/mock-interview",
-          label: "AI Mock Interview",
-          icon: <FaMicrophone />,
-          badge: "AI"
-        },
-        { href: "/domain-selection", label: "Domain Selection", icon: <FaCompass /> },
-        { href: "/study-planner", label: "Study Planner", icon: <FaCalendarAlt /> },
-        { href: "/ai-agent", label: "AI Copilot", icon: <FaRobot /> },
-      ]
-    },
-    {
-      title: "Tools & Practice",
-      items: [
-        { href: "/compiler", label: "Online Compiler", icon: <FaCode /> },
-        { href: "/interview-search", label: "Interview Questions", icon: <FaBriefcase /> },
-        { href: "/resume-matcher", label: "ATS Scanner", icon: <FaCheckCircle /> },
-        { href: "/resume-builder", label: "Resume Builder", icon: <FaFileAlt /> },
-        { href: "/job-search", label: "Job Search", icon: <FaSearch /> },
-      ]
-    },
-    {
-      title: "General & Settings",
-      items: [
-        { href: "/forum", label: "Community Forum", icon: <FaComments /> },
-        { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
-        { href: "/settings", label: "Groq API Settings", icon: <FaKey /> },
-      ]
-    }
+  // Single menu group with exact item order from the first design
+  const menuItems = [
+    { href: "/", label: "Home", icon: <FaHome /> },
+    { href: "/mock-interview", label: "AI Mock Interview", icon: <FaMicrophone /> },
+    { href: "/domain-selection", label: "Domain Selection", icon: <FaCompass /> },
+    { href: "/study-planner", label: "Study Planner", icon: <FaCalendarAlt /> },
+    { href: "/ai-agent", label: "AI Copilot", icon: <FaRobot /> },
+    { href: "/job-search", label: "Job Search", icon: <FaSearch /> },
+    { href: "/interview-search", label: "Interviews", icon: <FaBriefcase /> },
+    { href: "/resume-matcher", label: "ATS Scanner", icon: <FaCheckCircle /> },
+    { href: "/resume-builder", label: "Resume Builder", icon: <FaFileAlt /> },
+    { href: "/compiler", label: "Online Compiler", icon: <FaCode /> },
+    { href: "/forum", label: "Community Forum", icon: <FaComments /> },
+    { href: "/blog", label: "Placement Guides", icon: <FaGraduationCap /> },
+    { href: "/settings", label: "Groq API Settings", icon: <FaKey /> },
   ];
 
   return (
@@ -108,59 +88,40 @@ export default function Navbar() {
       {/* Sideways Navigation Sidebar */}
       <aside className={`sidebar-aside ${mobileOpen ? "open" : ""}`}>
         <div className="sidebar-inner">
-          {/* Brand Header */}
+          {/* Brand Header: Clean logo and title, no extra subtitle or divider */}
           <div className="sidebar-header">
             <Link href="/" className="sidebar-brand">
               <div className="brand-logo-icon">
                 <FaGraduationCap />
               </div>
-              <div className="brand-text">
-                <span className="brand-title">PlacementPrep</span>
-                <span className="brand-tag">AI CAREER SUITE</span>
-              </div>
+              <span className="brand-title">PlacementPrep</span>
             </Link>
           </div>
 
-          {/* Navigation Sections */}
+          {/* Single Section Heading: MAIN MENU */}
+          <div className="menu-section-header">
+            <span className="menu-heading-text">MAIN MENU</span>
+          </div>
+
+          {/* Navigation Links: Horizontal layout with icon on left and label beside it */}
           <nav className="sidebar-nav">
-            {navSections.map((section, sIdx) => (
-              <div key={sIdx} className="nav-section">
-                <p className="nav-section-title">{section.title}</p>
-                <ul className="nav-list">
-                  {section.items.map((item) => {
-                    const isActive = pathname === item.href;
-                    return (
-                      <li key={item.href} className="nav-list-item">
-                        <Link
-                          href={item.href}
-                          className={`sidebar-nav-link ${isActive ? "active" : ""}`}
-                        >
-                          <span className="nav-link-icon">{item.icon}</span>
-                          <span className="nav-link-label">{item.label}</span>
-                          {item.badge && (
-                            <span className="nav-link-badge">
-                              {item.badge}
-                            </span>
-                          )}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+            <ul className="nav-list">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <li key={item.href} className="nav-list-item">
+                    <Link
+                      href={item.href}
+                      className={`sidebar-nav-link ${isActive ? "active" : ""}`}
+                    >
+                      <span className="nav-link-icon">{item.icon}</span>
+                      <span className="nav-link-label">{item.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </nav>
-
-          {/* Clean Minimalist Footer */}
-          <div className="sidebar-footer">
-            <div className="sidebar-status-pill">
-              <span className="status-dot-pulse" />
-              <span className="status-label">Groq AI Connected</span>
-            </div>
-            <Link href="/settings" className="footer-settings-btn" title="Settings">
-              <FaCog />
-            </Link>
-          </div>
         </div>
       </aside>
 
@@ -225,16 +186,16 @@ export default function Navbar() {
           z-index: 1001;
         }
 
-        /* Sidebar Container */
+        /* Sidebar Container: Dark Navy #111827 and 280px width */
         .sidebar-aside {
           position: fixed;
           top: 0;
           left: 0;
           bottom: 0;
-          width: 260px;
+          width: 280px;
           height: 100vh;
-          background: #090e17;
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          background: #111827;
+          border-right: 1px solid #1f2937;
           z-index: 1002;
           overflow: hidden;
           transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -244,218 +205,153 @@ export default function Navbar() {
           display: flex;
           flex-direction: column;
           height: 100%;
-          padding: 18px 12px 14px;
+          padding: 22px 14px 20px;
           overflow-y: auto;
-          scrollbar-width: none;
+          scrollbar-width: thin;
+          scrollbar-color: #374151 transparent;
         }
 
         .sidebar-inner::-webkit-scrollbar {
-          display: none;
+          width: 4px;
         }
 
-        /* Brand */
+        .sidebar-inner::-webkit-scrollbar-thumb {
+          background: #374151;
+          border-radius: 4px;
+        }
+
+        /* Brand Header: Logo + Title without extra subtitle or divider */
         .sidebar-header {
-          padding: 2px 6px 14px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-          margin-bottom: 12px;
+          padding: 0 6px 20px;
         }
 
         .sidebar-brand {
           display: flex;
           align-items: center;
-          gap: 11px;
+          gap: 12px;
           text-decoration: none;
         }
 
         .brand-logo-icon {
-          width: 34px;
-          height: 34px;
+          width: 36px;
+          height: 36px;
           border-radius: 9px;
-          background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+          background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
           display: flex;
           align-items: center;
           justify-content: center;
           color: #ffffff;
-          font-size: 1.05rem;
-          box-shadow: 0 2px 10px rgba(124, 58, 237, 0.4);
+          font-size: 1.1rem;
           flex-shrink: 0;
-        }
-
-        .brand-text {
-          display: flex;
-          flex-direction: column;
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
         }
 
         .brand-title {
           font-weight: 700;
-          font-size: 1.02rem;
+          font-size: 1.08rem;
           letter-spacing: -0.01em;
           color: #ffffff;
           line-height: 1.2;
         }
 
-        .brand-tag {
-          font-size: 0.6rem;
-          font-weight: 600;
-          letter-spacing: 0.08em;
-          color: #94a3b8;
-          margin-top: 1px;
+        /* Section Heading: Small uppercase in muted gray-blue */
+        .menu-section-header {
+          padding: 6px 10px 8px;
         }
 
-        /* Nav Sections */
-        .sidebar-nav {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-        }
-
-        .nav-section {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .nav-section-title {
-          font-size: 0.66rem;
+        .menu-heading-text {
+          font-size: 0.7rem;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.08em;
           color: #64748b;
-          padding: 0 10px;
-          margin-bottom: 4px;
+          font-family: inherit;
+        }
+
+        /* Nav List & Items */
+        .sidebar-nav {
+          flex: 1;
         }
 
         .nav-list {
           list-style: none;
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 4px;
+          margin: 0;
+          padding: 0;
         }
 
+        .nav-list-item {
+          width: 100%;
+        }
+
+        /* Horizontal Layout: Icon on the left, label beside it */
         .sidebar-nav-link {
-          position: relative;
           display: flex;
+          flex-direction: row;
           align-items: center;
-          gap: 11px;
-          padding: 8px 12px;
-          border-radius: 8px;
-          color: #cbd5e1 !important;
-          font-size: 0.88rem;
+          gap: 12px;
+          padding: 10px 14px;
+          border-radius: 6px;
+          color: #94a3b8 !important;
+          font-size: 0.9rem;
           font-weight: 500;
           text-decoration: none;
-          transition: background 0.15s ease, color 0.15s ease;
+          transition: background-color 0.15s ease, color 0.15s ease;
+          border-left: 3px solid transparent;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .sidebar-nav-link:hover {
-          color: #ffffff !important;
-          background: rgba(255, 255, 255, 0.06);
-        }
-
-        .sidebar-nav-link.active {
-          color: #ffffff !important;
-          background: #7c3aed !important;
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
-        }
-
-        .nav-link-icon {
-          font-size: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 20px;
-          color: #94a3b8;
-          transition: color 0.15s ease;
-          flex-shrink: 0;
+          color: #f1f5f9 !important;
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .sidebar-nav-link:hover .nav-link-icon {
-          color: #ffffff;
+          color: #f1f5f9;
+        }
+
+        /* Active Item: Rounded purple-tinted background, thin purple left border, purple icon and text */
+        .sidebar-nav-link.active {
+          background: rgba(168, 85, 247, 0.14) !important;
+          border-left: 3px solid #a855f7 !important;
+          border-radius: 6px;
+          color: #c084fc !important;
+          font-weight: 600;
         }
 
         .sidebar-nav-link.active .nav-link-icon {
-          color: #ffffff !important;
+          color: #a855f7 !important;
         }
 
+        .sidebar-nav-link.active .nav-link-label {
+          color: #c084fc !important;
+          font-weight: 600;
+        }
+
+        /* Consistent icon size and vertical alignment */
+        .nav-link-icon {
+          width: 20px;
+          height: 20px;
+          font-size: 1.05rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #94a3b8;
+          flex-shrink: 0;
+          transition: color 0.15s ease;
+        }
+
+        /* Label stays on a single line */
         .nav-link-label {
           flex: 1;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          color: inherit;
-        }
-
-        .nav-link-badge {
-          font-size: 0.58rem;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          padding: 1px 6px;
-          border-radius: 4px;
-          background: rgba(124, 58, 237, 0.25);
-          color: #c4b5fd;
-          border: 1px solid rgba(124, 58, 237, 0.4);
-        }
-
-        .sidebar-nav-link.active .nav-link-badge {
-          background: rgba(255, 255, 255, 0.25);
-          color: #ffffff;
-          border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Clean Minimal Footer */
-        .sidebar-footer {
-          margin-top: auto;
-          padding-top: 12px;
-          border-top: 1px solid rgba(255, 255, 255, 0.07);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-left: 6px;
-          padding-right: 4px;
-        }
-
-        .sidebar-status-pill {
-          display: flex;
-          align-items: center;
-          gap: 7px;
-        }
-
-        .status-dot-pulse {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 6px #10b981;
-          animation: statusPulse 2s infinite;
-        }
-
-        @keyframes statusPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.35; }
-        }
-
-        .status-label {
-          font-size: 0.72rem;
-          color: #94a3b8;
-          font-weight: 500;
-        }
-
-        .footer-settings-btn {
-          width: 28px;
-          height: 28px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #94a3b8;
-          font-size: 0.88rem;
-          text-decoration: none;
-          transition: all 0.15s ease;
-        }
-
-        .footer-settings-btn:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.08);
+          line-height: 1.2;
+          font-family: inherit;
         }
 
         /* Responsive */
