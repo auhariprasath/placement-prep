@@ -73,7 +73,7 @@ export default function Footer() {
           border-top: 1px solid #e2e8f0;
           padding: 60px 0 30px;
           position: relative;
-          z-index: 10;
+          z-index: auto;
         }
 
         .footer-grid {

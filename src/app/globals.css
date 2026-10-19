@@ -510,3 +510,38 @@ input::placeholder, textarea::placeholder {
     padding: 0 16px;
   }
 }
+
+/* =========================================================================
+   Global Modal Overlay & Backdrop Standards (Portals & Viewport Stacking)
+   ========================================================================= */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.article-modal {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  padding: 32px;
+  position: relative;
+  z-index: 1001;
+}
+
+@media (max-width: 640px) {
+  .article-modal {
+    padding: 20px;
+  }
+}

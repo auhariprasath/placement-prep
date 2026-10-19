@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   FaGraduationCap,
   FaHeart,
@@ -17,6 +18,7 @@ export default function BlogPage() {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeArticle, setActiveArticle] = useState(null);
+  const [mounted, setMounted] = useState(false);
 
   const fetchArticles = async () => {
     setLoading(true);
@@ -34,8 +36,27 @@ export default function BlogPage() {
   };
 
   useEffect(() => {
+    setMounted(true);
     fetchArticles();
   }, []);
+
+  // Lock body scroll and listen for Escape key when article modal is open
+  useEffect(() => {
+    if (activeArticle) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+          setActiveArticle(null);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [activeArticle]);
 
   const handleLike = async (postId, e) => {
     e.stopPropagation();
@@ -128,46 +149,136 @@ export default function BlogPage() {
         )}
       </div>
 
-      {/* Article Detail Modal */}
-      {activeArticle && (
-        <div className="modal-backdrop" onClick={() => setActiveArticle(null)}>
-          <div className="article-modal card-glass" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-top-bar">
-              <span className="pill-chip">{activeArticle.category}</span>
-              <button
-                onClick={() => setActiveArticle(null)}
-                className="close-btn"
-                title="Close"
+      {/* Article Detail Modal (Top-level Overlay) */}
+      {activeArticle &&
+        (mounted && typeof document !== "undefined" ? (
+          createPortal(
+            <div
+              className="modal-backdrop"
+              onClick={() => setActiveArticle(null)}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-article-title"
+            >
+              <div
+                className="article-modal card-glass"
+                onClick={(e) => e.stopPropagation()}
               >
-                <FaTimes />
-              </button>
-            </div>
+                <div className="modal-top-bar">
+                  <span className="pill-chip">{activeArticle.category}</span>
+                  <button
+                    onClick={() => setActiveArticle(null)}
+                    className="close-btn"
+                    title="Close"
+                    aria-label="Close"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
 
-            <h1 className="modal-article-title">{activeArticle.title}</h1>
-            <div className="modal-meta-line">
-              <span>By {activeArticle.author}</span> • <span>{activeArticle.date}</span> • <span>{activeArticle.readTime}</span>
-            </div>
+                <h1 id="modal-article-title" className="modal-article-title">
+                  {activeArticle.title}
+                </h1>
+                <div className="modal-meta-line">
+                  <span>By {activeArticle.author}</span> •{" "}
+                  <span>{activeArticle.date}</span> •{" "}
+                  <span>{activeArticle.readTime}</span>
+                </div>
 
-            <div className="article-body-content">
-              {activeArticle.content.split("\n\n").map((para, i) => {
-                if (para.startsWith("### ")) {
-                  return <h3 key={i} className="content-h3">{para.replace("### ", "")}</h3>;
-                }
-                if (para.startsWith("1. ") || para.startsWith("- ")) {
+                <div className="article-body-content">
+                  {activeArticle.content.split("\n\n").map((para, i) => {
+                    if (para.startsWith("### ")) {
+                      return (
+                        <h3 key={i} className="content-h3">
+                          {para.replace("### ", "")}
+                        </h3>
+                      );
+                    }
+                    if (para.startsWith("1. ") || para.startsWith("- ")) {
+                      return (
+                        <div key={i} className="content-list-block">
+                          {para.split("\n").map((line, lIdx) => (
+                            <p key={lIdx} style={{ marginBottom: "6px" }}>
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      );
+                    }
+                    return (
+                      <p key={i} className="content-p">
+                        {para}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        ) : (
+          <div
+            className="modal-backdrop"
+            onClick={() => setActiveArticle(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-article-title"
+          >
+            <div
+              className="article-modal card-glass"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-top-bar">
+                <span className="pill-chip">{activeArticle.category}</span>
+                <button
+                  onClick={() => setActiveArticle(null)}
+                  className="close-btn"
+                  title="Close"
+                  aria-label="Close"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+
+              <h1 id="modal-article-title" className="modal-article-title">
+                {activeArticle.title}
+              </h1>
+              <div className="modal-meta-line">
+                <span>By {activeArticle.author}</span> •{" "}
+                <span>{activeArticle.date}</span> •{" "}
+                <span>{activeArticle.readTime}</span>
+              </div>
+
+              <div className="article-body-content">
+                {activeArticle.content.split("\n\n").map((para, i) => {
+                  if (para.startsWith("### ")) {
+                    return (
+                      <h3 key={i} className="content-h3">
+                        {para.replace("### ", "")}
+                      </h3>
+                    );
+                  }
+                  if (para.startsWith("1. ") || para.startsWith("- ")) {
+                    return (
+                      <div key={i} className="content-list-block">
+                        {para.split("\n").map((line, lIdx) => (
+                          <p key={lIdx} style={{ marginBottom: "6px" }}>
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    );
+                  }
                   return (
-                    <div key={i} className="content-list-block">
-                      {para.split("\n").map((line, lIdx) => (
-                        <p key={lIdx} style={{ marginBottom: "6px" }}>{line}</p>
-                      ))}
-                    </div>
+                    <p key={i} className="content-p">
+                      {para}
+                    </p>
                   );
-                }
-                return <p key={i} className="content-p">{para}</p>;
-              })}
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
 
       <style jsx>{`
         .blog-search-card {
@@ -284,29 +395,28 @@ export default function BlogPage() {
         /* Modal */
         .modal-backdrop {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(4px);
+          inset: 0;
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 2000;
-          padding: 20px;
+          z-index: 1000;
+          padding: 16px;
         }
 
         .article-modal {
-          width: 100%;
-          max-width: 760px;
-          max-height: 85vh;
+          width: min(760px, calc(100vw - 32px));
+          max-height: calc(100vh - 48px);
           overflow-y: auto;
           background: #ffffff;
           border: 1px solid #e2e8f0;
           border-radius: var(--radius-md);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-          padding: 36px;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+          padding: 32px;
+          position: relative;
+          z-index: 1001;
         }
 
         .modal-top-bar {
@@ -314,19 +424,35 @@ export default function BlogPage() {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 16px;
+          position: sticky;
+          top: -32px;
+          background: #ffffff;
+          padding-top: 6px;
+          padding-bottom: 8px;
+          margin-top: -6px;
+          z-index: 10;
         }
 
         .close-btn {
           background: #f1f5f9;
-          border: none;
+          border: 1px solid #e2e8f0;
           color: #475569;
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
+          font-size: 0.95rem;
+          transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+          background: #fee2e2;
+          color: #ef4444;
+          border-color: #fca5a5;
+          transform: scale(1.05);
         }
 
         .modal-article-title {
@@ -349,6 +475,7 @@ export default function BlogPage() {
           line-height: 1.8;
           border-top: 1px solid #e2e8f0;
           padding-top: 20px;
+          padding-bottom: 12px;
         }
 
         .content-h3 {
@@ -382,6 +509,15 @@ export default function BlogPage() {
         @media (max-width: 640px) {
           .articles-grid {
             grid-template-columns: 1fr;
+          }
+          .article-modal {
+            padding: 20px;
+          }
+          .modal-top-bar {
+            top: -20px;
+          }
+          .modal-article-title {
+            font-size: 1.35rem;
           }
         }
       `}</style>
