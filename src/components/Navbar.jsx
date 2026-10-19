@@ -32,7 +32,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1024) {
+      if (window.innerWidth > 768) {
         setMobileOpen(false);
       }
     };
@@ -59,13 +59,13 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Mobile Top Bar */}
+      {/* Mobile Top Bar (Only visible <= 768px) */}
       <header className="mobile-topbar">
         <Link href="/" className="mobile-brand">
           <div className="brand-logo-icon">
             <FaGraduationCap />
           </div>
-          <span className="brand-title">PlacementPrep</span>
+          <span className="brand-title" style={{ color: "#0f172a" }}>PlacementPrep</span>
         </Link>
         <button
           className="mobile-hamburger-btn"
@@ -85,8 +85,14 @@ export default function Navbar() {
         />
       )}
 
-      {/* Sideways Navigation Sidebar */}
-      <aside className={`sidebar-aside ${mobileOpen ? "open" : ""}`}>
+      {/* Sideways Navigation Sidebar: Dark Navy #111827 */}
+      <aside
+        className={`sidebar-aside ${mobileOpen ? "open" : ""}`}
+        style={{
+          backgroundColor: "#111827",
+          width: "280px",
+        }}
+      >
         <div className="sidebar-inner">
           {/* Brand Header: Clean logo and title, no extra subtitle or divider */}
           <div className="sidebar-header">
@@ -94,13 +100,29 @@ export default function Navbar() {
               <div className="brand-logo-icon">
                 <FaGraduationCap />
               </div>
-              <span className="brand-title">PlacementPrep</span>
+              <span
+                className="brand-title"
+                style={{ color: "#ffffff", fontWeight: 700, fontSize: "1.08rem" }}
+              >
+                PlacementPrep
+              </span>
             </Link>
           </div>
 
           {/* Single Section Heading: MAIN MENU */}
           <div className="menu-section-header">
-            <span className="menu-heading-text">MAIN MENU</span>
+            <span
+              className="menu-heading-text"
+              style={{
+                color: "#94a3b8",
+                fontWeight: 700,
+                fontSize: "0.72rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+              }}
+            >
+              MAIN MENU
+            </span>
           </div>
 
           {/* Navigation Links: Horizontal layout with icon on left and label beside it */}
@@ -113,9 +135,50 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={`sidebar-nav-link ${isActive ? "active" : ""}`}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: "12px",
+                        padding: "10px 14px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        width: "100%",
+                        boxSizing: "border-box",
+                        backgroundColor: isActive ? "rgba(168, 85, 247, 0.14)" : "transparent",
+                        borderLeft: isActive ? "3px solid #a855f7" : "3px solid transparent",
+                        color: isActive ? "#c084fc" : "#94a3b8",
+                      }}
                     >
-                      <span className="nav-link-icon">{item.icon}</span>
-                      <span className="nav-link-label">{item.label}</span>
+                      <span
+                        className="nav-link-icon"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          fontSize: "1.05rem",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                          color: isActive ? "#a855f7" : "#94a3b8",
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                      <span
+                        className="nav-link-label"
+                        style={{
+                          flex: 1,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          fontSize: "0.9rem",
+                          fontWeight: isActive ? 600 : 500,
+                          color: isActive ? "#c084fc" : "#94a3b8",
+                        }}
+                      >
+                        {item.label}
+                      </span>
                     </Link>
                   </li>
                 );
@@ -148,12 +211,6 @@ export default function Navbar() {
           align-items: center;
           gap: 10px;
           text-decoration: none;
-        }
-
-        .mobile-brand .brand-title {
-          font-weight: 800;
-          font-size: 1.1rem;
-          color: #0f172a;
         }
 
         .mobile-hamburger-btn {
@@ -194,7 +251,7 @@ export default function Navbar() {
           bottom: 0;
           width: 280px;
           height: 100vh;
-          background: #111827;
+          background-color: #111827;
           border-right: 1px solid #1f2937;
           z-index: 1002;
           overflow: hidden;
@@ -222,7 +279,7 @@ export default function Navbar() {
 
         /* Brand Header: Logo + Title without extra subtitle or divider */
         .sidebar-header {
-          padding: 0 6px 20px;
+          padding: 0 6px 18px;
         }
 
         .sidebar-brand {
@@ -246,26 +303,9 @@ export default function Navbar() {
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
         }
 
-        .brand-title {
-          font-weight: 700;
-          font-size: 1.08rem;
-          letter-spacing: -0.01em;
-          color: #ffffff;
-          line-height: 1.2;
-        }
-
         /* Section Heading: Small uppercase in muted gray-blue */
         .menu-section-header {
-          padding: 6px 10px 8px;
-        }
-
-        .menu-heading-text {
-          font-size: 0.7rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #64748b;
-          font-family: inherit;
+          padding: 6px 12px 10px;
         }
 
         /* Nav List & Items */
@@ -286,76 +326,13 @@ export default function Navbar() {
           width: 100%;
         }
 
-        /* Horizontal Layout: Icon on the left, label beside it */
-        .sidebar-nav-link {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 12px;
-          padding: 10px 14px;
-          border-radius: 6px;
-          color: #94a3b8 !important;
-          font-size: 0.9rem;
-          font-weight: 500;
-          text-decoration: none;
-          transition: background-color 0.15s ease, color 0.15s ease;
-          border-left: 3px solid transparent;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
         .sidebar-nav-link:hover {
           color: #f1f5f9 !important;
-          background: rgba(255, 255, 255, 0.05);
+          background-color: rgba(255, 255, 255, 0.06) !important;
         }
 
-        .sidebar-nav-link:hover .nav-link-icon {
-          color: #f1f5f9;
-        }
-
-        /* Active Item: Rounded purple-tinted background, thin purple left border, purple icon and text */
-        .sidebar-nav-link.active {
-          background: rgba(168, 85, 247, 0.14) !important;
-          border-left: 3px solid #a855f7 !important;
-          border-radius: 6px;
-          color: #c084fc !important;
-          font-weight: 600;
-        }
-
-        .sidebar-nav-link.active .nav-link-icon {
-          color: #a855f7 !important;
-        }
-
-        .sidebar-nav-link.active .nav-link-label {
-          color: #c084fc !important;
-          font-weight: 600;
-        }
-
-        /* Consistent icon size and vertical alignment */
-        .nav-link-icon {
-          width: 20px;
-          height: 20px;
-          font-size: 1.05rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #94a3b8;
-          flex-shrink: 0;
-          transition: color 0.15s ease;
-        }
-
-        /* Label stays on a single line */
-        .nav-link-label {
-          flex: 1;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          line-height: 1.2;
-          font-family: inherit;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
+        /* Responsive: Only collapse on small mobile devices (<= 768px) */
+        @media (max-width: 768px) {
           .mobile-topbar {
             display: flex;
           }

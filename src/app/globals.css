@@ -130,7 +130,7 @@ button, input, textarea, select {
   min-height: calc(100vh - 120px);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .app-main-viewport {
     margin-left: 0;
     padding-top: 60px;
@@ -139,6 +139,153 @@ button, input, textarea, select {
     padding-top: 24px;
     padding-bottom: 50px;
   }
+}
+
+/* =========================================================================
+   Sidebar Layout & Permanent Visibility Styles (Dark Navy #111827)
+   ========================================================================= */
+.sidebar-aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #111827 !important;
+  border-right: 1px solid #1f2937 !important;
+  z-index: 1002;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 22px 14px 20px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.sidebar-header {
+  padding: 0 6px 18px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: #ffffff !important;
+  letter-spacing: -0.01em;
+}
+
+.menu-section-header {
+  padding: 6px 12px 10px;
+}
+
+.menu-heading-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8 !important;
+}
+
+.sidebar-nav {
+  flex: 1;
+}
+
+.sidebar-nav .nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-nav-link {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 14px !important;
+  border-radius: 6px !important;
+  color: #94a3b8 !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border-left: 3px solid transparent !important;
+  transition: all 0.15s ease;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.sidebar-nav-link:hover {
+  color: #f1f5f9 !important;
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.sidebar-nav-link:hover .nav-link-icon,
+.sidebar-nav-link:hover .nav-link-label {
+  color: #f1f5f9 !important;
+}
+
+.sidebar-nav-link.active {
+  background-color: rgba(168, 85, 247, 0.14) !important;
+  border-left: 3px solid #a855f7 !important;
+  border-radius: 6px !important;
+  color: #c084fc !important;
+  font-weight: 600 !important;
+}
+
+.sidebar-nav-link.active .nav-link-icon {
+  color: #a855f7 !important;
+}
+
+.sidebar-nav-link.active .nav-link-label {
+  color: #c084fc !important;
+  font-weight: 600 !important;
+}
+
+.sidebar-nav-link .nav-link-icon {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 1.05rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #94a3b8 !important;
+  flex-shrink: 0 !important;
+}
+
+.sidebar-nav-link .nav-link-label {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  line-height: 1.2 !important;
 }
 
 /* Glassmorphism Card on White Background */
