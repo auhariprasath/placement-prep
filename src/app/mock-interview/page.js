@@ -18,7 +18,8 @@ import {
   FaArrowLeft,
   FaLightbulb,
   FaAward,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaRobot
 } from "react-icons/fa";
 
 export default function MockInterviewPage() {
