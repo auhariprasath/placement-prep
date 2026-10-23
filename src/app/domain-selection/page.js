@@ -12,7 +12,8 @@ import {
   FaRedo,
   FaCheckCircle,
   FaMoneyBillWave,
-  FaArrowRight
+  FaLayerGroup,
+  FaSearch
 } from "react-icons/fa";
 
 export default function DomainSelectionPage() {
@@ -20,18 +21,46 @@ export default function DomainSelectionPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [showAllBranches, setShowAllBranches] = useState(false);
+  const [branchFilter, setBranchFilter] = useState("");
 
-  const samplePrompts = [
-    "I love building web applications, designing user interfaces in React, and writing clean backend APIs.",
-    "I have a passion for machine learning, Python, data analysis, neural networks, and generative AI models.",
-    "I enjoy low-level programming, operating systems, Linux internals, microcontrollers, and IoT devices.",
-    "I want to protect systems from cyber attacks, learn ethical hacking, network protocols, and cloud security."
+  // The 20 approved engineering courses/disciplines
+  const approvedBranches = [
+    { name: "Computer Science & Engineering (CSE)", icon: "💻", sample: "I love solving complex algorithms, full-stack software development in Java and React, operating system internals, and scalable cloud architectures." },
+    { name: "Artificial Intelligence & Machine Learning (AI/ML)", icon: "🧠", sample: "I am passionate about neural networks, deep learning with PyTorch, computer vision, natural language processing, and building LLM applications." },
+    { name: "Artificial Intelligence & Data Science (AI & DS)", icon: "📊", sample: "I enjoy working with big data pipelines, statistical modeling, machine learning with Pandas/Spark, data warehousing, and business intelligence." },
+    { name: "Electronics & Communication Engineering (ECE)", icon: "📡", sample: "I am interested in digital signal processing, 5G wireless networks, antenna design, microprocessors, and embedded hardware communication." },
+    { name: "Cyber Security", icon: "🛡️", sample: "I want to master ethical hacking, network penetration testing, cryptography, defensive security operations (SOC), and cloud security hardening." },
+    { name: "Information Technology (IT)", icon: "🌐", sample: "I want to specialize in DevOps pipelines, cloud computing on AWS, enterprise system architecture, container orchestration, and server administration." },
+    { name: "Electrical & Electronics Engineering (EEE)", icon: "⚡", sample: "I am fascinated by electrical machines, high-voltage power grids, power electronics, motor drives, and electric vehicle battery systems." },
+    { name: "Computer Science & Business Systems (CSBS)", icon: "📈", sample: "I want to combine computer science with business systems, financial engineering, enterprise product management, agile delivery, and ERP." },
+    { name: "Mechanical Engineering", icon: "⚙️", sample: "I love 3D CAD modeling in SolidWorks, engineering thermodynamics, fluid dynamics, stress analysis, and manufacturing machinery." },
+    { name: "Robotics & Automation", icon: "🤖", sample: "I am passionate about robot kinematics, ROS 2 autonomous navigation, industrial PLCs, computer vision, and robotic actuators." },
+    { name: "Internet of Things (IoT)", icon: "📶", sample: "I love building smart connected devices with ESP32 and Arduino, sensor networks, MQTT wireless protocols, and cloud edge analytics." },
+    { name: "Electronics/VLSI Design & Technology", icon: "🔲", sample: "I want to design semiconductor silicon chips, write Verilog HDL code for FPGAs, CMOS VLSI physical design, and ASIC timing closure." },
+    { name: "Mechatronics Engineering", icon: "🦾", sample: "I enjoy combining mechanical mechanisms, electronic sensors, hydraulic/pneumatic actuators, and closed-loop control systems." },
+    { name: "Automobile Engineering", icon: "🚗", sample: "I have a deep passion for vehicle dynamics, electric vehicle powertrains, automotive chassis design, crash safety, and suspension tuning." },
+    { name: "Civil Engineering", icon: "🏗️", sample: "I want to design structural buildings and bridges, work with BIM in Revit, soil mechanics, and modern smart city transportation systems." },
+    { name: "Aeronautical Engineering", icon: "✈️", sample: "I am fascinated by aircraft aerodynamics, jet engine propulsion cycles, flight dynamics, and thin-walled structural analysis." },
+    { name: "Biotechnology", icon: "🧬", sample: "I am interested in genetic engineering, molecular biology, CRISPR gene editing, bioprocess fermentation, and computational bioinformatics." },
+    { name: "Biomedical Engineering", icon: "🩺", sample: "I want to build life-saving medical devices, MRI and ultrasound imaging systems, biosensors, and prosthetic biomechanical implants." },
+    { name: "Chemical Engineering", icon: "🧪", sample: "I am interested in chemical reaction engineering, distillation columns, mass transfer operations, and industrial plant simulations in Aspen Plus." },
+    { name: "Aerospace Engineering", icon: "🚀", sample: "I want to work on rocket propulsion, orbital mechanics, satellite trajectory design, space missions, and hypersonic re-entry heat shields." }
+  ];
+
+  const quickPrompts = [
+    { label: "Full Stack & Algorithms", text: "I love building scalable web applications, designing user interfaces in React, and writing clean backend APIs with database optimizations." },
+    { label: "AI & Neural Networks", text: "I have a strong passion for deep neural networks, computer vision, PyTorch, natural language processing, and Generative AI." },
+    { label: "Ethical Hacking & Defense", text: "I want to protect computer systems from cyber threats, perform penetration testing, analyze network protocols, and secure cloud environments." },
+    { label: "Autonomous Robotics & ROS", text: "I enjoy building autonomous mobile robots, programming in ROS 2, integrating LiDAR sensors, and working with industrial PLCs." },
+    { label: "Semiconductor & VLSI", text: "I am interested in silicon microchips, FPGA synthesis, RTL coding in Verilog, and CMOS physical layout design." },
+    { label: "Rocket Propulsion & Space", text: "I dream of designing rocket engines, orbital flight trajectories, satellite constellations, and spacecraft thermal shielding." }
   ];
 
   const handlePredict = async (statement) => {
     const textToSubmit = statement || userInput;
     if (!textToSubmit.trim()) {
-      setError("Please describe your interests or select one of the sample interests below.");
+      setError("Please describe your interests or click one of the 20 branches / sample prompts below.");
       return;
     }
 
@@ -55,6 +84,10 @@ export default function DomainSelectionPage() {
     }
   };
 
+  const filteredBranches = approvedBranches.filter(b =>
+    b.name.toLowerCase().includes(branchFilter.toLowerCase())
+  );
+
   return (
     <div className="page-wrapper container" suppressHydrationWarning>
       <div className="page-header">
@@ -63,42 +96,95 @@ export default function DomainSelectionPage() {
         </span>
         <h1 className="page-title">Engineering Domain Selection & Curriculum</h1>
         <p className="page-subtitle">
-          Describe your technical interests, coding passions, or career dreams to uncover your best-fit engineering domain, placement outlook, and video courses.
+          Describe your technical interests, coding passions, or career dreams. Groq AI evaluates your statement and recommends the best-fit discipline strictly from <strong>20 premier engineering courses</strong>.
         </p>
       </div>
 
       {/* Input Section */}
       <div className="domain-input-card card-glass">
-        <label className="form-label">
-          What are your technical interests, hobbies, or dream project ideas?
-        </label>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+          <label className="form-label" style={{ marginBottom: 0 }}>
+            What are your technical interests, passions, or dream projects?
+          </label>
+          <span className="branch-count-badge">
+            <FaLayerGroup style={{ marginRight: "5px" }} /> 20 Engineering Courses
+          </span>
+        </div>
+
         <textarea
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="e.g. I enjoy coding in Java, building REST APIs, working with MySQL databases, and solving algorithmic problems on LeetCode..."
+          placeholder="e.g. I enjoy coding in Java, building REST APIs, working with MySQL databases, or designing robotics and VLSI chips..."
           className="form-textarea"
-          style={{ minHeight: "110px", marginBottom: "16px" }}
+          style={{ minHeight: "115px", marginBottom: "16px" }}
         />
 
+        {/* Quick Sample Prompts */}
         <div className="sample-prompts-box">
           <span className="sample-label">
-            <FaLightbulb style={{ color: "#f59e0b" }} /> Try a sample interest:
+            <FaLightbulb style={{ color: "#f59e0b" }} /> Try a quick prompt:
           </span>
           <div className="prompt-chips">
-            {samplePrompts.map((p, idx) => (
+            {quickPrompts.map((p, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => {
-                  setUserInput(p);
-                  handlePredict(p);
+                  setUserInput(p.text);
+                  handlePredict(p.text);
                 }}
                 className="chip-btn"
               >
-                {p.slice(0, 48)}...
+                {p.label}
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Explore all 20 Branches Accordion/Pills */}
+        <div className="all-branches-container">
+          <div className="all-branches-header">
+            <button
+              type="button"
+              className="toggle-branches-btn"
+              onClick={() => setShowAllBranches(!showAllBranches)}
+            >
+              <FaLayerGroup /> {showAllBranches ? "Hide 20 Target Engineering Branches" : "Browse All 20 Target Engineering Courses & Click to Test"}
+            </button>
+          </div>
+
+          {showAllBranches && (
+            <div className="branches-drawer">
+              <div className="branch-search-bar">
+                <FaSearch style={{ color: "#94a3b8" }} />
+                <input
+                  type="text"
+                  placeholder="Filter the 20 branches..."
+                  value={branchFilter}
+                  onChange={(e) => setBranchFilter(e.target.value)}
+                  className="branch-filter-input"
+                />
+              </div>
+
+              <div className="branches-grid">
+                {filteredBranches.map((branch, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="branch-card-btn"
+                    onClick={() => {
+                      setUserInput(branch.sample);
+                      handlePredict(branch.sample);
+                    }}
+                    title="Click to evaluate AI prediction for this branch"
+                  >
+                    <span className="branch-icon">{branch.icon}</span>
+                    <span className="branch-name">{branch.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <button
@@ -109,11 +195,11 @@ export default function DomainSelectionPage() {
         >
           {loading ? (
             <>
-              <FaSpinner className="spin" /> Analyzing Your Engineering Aptitude...
+              <FaSpinner className="spin" /> Groq AI Analyzing Across 20 Engineering Branches...
             </>
           ) : (
             <>
-              <FaCompass /> Predict Engineering Domain & Curriculum
+              <FaCompass /> Recommend Best Engineering Course & Curriculum
             </>
           )}
         </button>
@@ -129,7 +215,7 @@ export default function DomainSelectionPage() {
             <div className="domain-header-row">
               <div>
                 <span className="badge-tag" style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", borderColor: "rgba(16, 185, 129, 0.3)" }}>
-                  <FaCheckCircle style={{ marginRight: "6px" }} /> Best Match ({result.confidence || 92}%)
+                  <FaCheckCircle style={{ marginRight: "6px" }} /> Top Matched Course ({result.confidence || 92}%)
                 </span>
                 <h2 className="predicted-domain-name">{result.predictedDomain}</h2>
               </div>
@@ -250,6 +336,18 @@ export default function DomainSelectionPage() {
           padding: 32px;
         }
 
+        .branch-count-badge {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.8rem;
+          color: #4f46e5;
+          background: #eef2ff;
+          border: 1px solid #c7d2fe;
+          padding: 4px 10px;
+          border-radius: var(--radius-full);
+          font-weight: 600;
+        }
+
         .sample-prompts-box {
           margin-top: 14px;
         }
@@ -275,7 +373,8 @@ export default function DomainSelectionPage() {
           color: #334155;
           padding: 6px 12px;
           border-radius: var(--radius-full);
-          font-size: 0.8rem;
+          font-size: 0.82rem;
+          font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
           text-align: left;
@@ -285,6 +384,107 @@ export default function DomainSelectionPage() {
           background: #e0e7ff;
           border-color: #a5b4fc;
           color: #4338ca;
+          transform: translateY(-1px);
+        }
+
+        /* 20 Branches Drawer */
+        .all-branches-container {
+          margin-top: 18px;
+          border-top: 1px dashed #e2e8f0;
+          padding-top: 14px;
+        }
+
+        .toggle-branches-btn {
+          background: transparent;
+          border: none;
+          color: #4f46e5;
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 4px 0;
+          transition: color 0.2s;
+        }
+
+        .toggle-branches-btn:hover {
+          color: #3730a3;
+          text-decoration: underline;
+        }
+
+        .branches-drawer {
+          margin-top: 12px;
+          padding: 16px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .branch-search-bar {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          border-radius: 8px;
+          padding: 8px 12px;
+          margin-bottom: 12px;
+        }
+
+        .branch-filter-input {
+          border: none;
+          outline: none;
+          width: 100%;
+          font-size: 0.85rem;
+          color: #0f172a;
+        }
+
+        .branches-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 8px;
+          max-height: 280px;
+          overflow-y: auto;
+          padding-right: 4px;
+        }
+
+        .branch-card-btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          padding: 8px 12px;
+          text-align: left;
+          font-size: 0.82rem;
+          color: #1e293b;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .branch-card-btn:hover {
+          border-color: #818cf8;
+          background: #eef2ff;
+          color: #3730a3;
+          transform: translateY(-1px);
+        }
+
+        .branch-icon {
+          font-size: 1.1rem;
+          flex-shrink: 0;
+        }
+
+        .branch-name {
+          font-weight: 600;
+          line-height: 1.3;
         }
 
         .error-text {
